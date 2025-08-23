@@ -17,18 +17,18 @@ export default function Footer() {
     // brands:
     return (
         <>
-            <footer className="bg-primary text-primary-foreground">
+            <footer className="bg-primary text-primary-foreground text-lg">
                 <div className="container max-w-full">
                     <div className="siteMap mx-auto px-16 py-10 bg-gray-600/50 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                         <div>
-                            <h3 className="mb-3">Legal Pages</h3>
+                            <h3 className="mb-3 opacity-50">Legal Pages</h3>
                             <ul>
                                 <li><Link href="#">Privacy Policy</Link></li>
                                 <li className="mt-2"><Link href="#">Terms and Conditions</Link></li>
                             </ul>
                         </div>
                         <div>
-                            <h3 className="mb-3">Products</h3>
+                            <h3 className="mb-3 opacity-50">Products</h3>
                             <ul>
                                 <li><Link href="#">Latest Products</Link></li>
                                 <li className="mt-2"><Link href="#">All Products</Link></li>
@@ -38,9 +38,9 @@ export default function Footer() {
                             </ul>
                         </div>
                         <div>
-                            <h3 className="mb-3">Newsletter</h3>
+                            <h3 className="mb-3 opacity-50">Newsletter</h3>
                             <p>Want to get notified with our new products?</p>
-                            <form className="flex gap-2.5 mt-2">
+                            <form className="flex gap-2.5 mt-4">
                                 <Input type="email" placeholder="Enter your email" />
                                 <Button type="submit">Subscribe</Button>
                             </form>
