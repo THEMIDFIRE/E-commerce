@@ -1,0 +1,27 @@
+import { Button } from "@/components/ui/button";
+import ProdCard from "../shared/ProdCard";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+
+export default function Popular() {
+    return (
+        <section>
+            <div className="container py-16 max-w-4/5 mx-auto">
+                <div className="flex justify-between items-center">
+                    <h3 className="text-2xl font-bold">Most Popular Products</h3>
+                    <Button className="mt-5">
+                        <Link href="/products" className="flex items-center gap-2">
+                            View All
+                            <ChevronRight/>
+                        </Link>
+                    </Button>
+                </div>
+                <div className="inner mt-11 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+                    {new Array(8).fill(null).map((_, index) => (
+                        <ProdCard key={index} />
+                    ))}
+                </div>
+            </div>
+        </section>
+    )
+}

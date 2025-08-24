@@ -4,7 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import Image from "next/image";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ShoppingCart, UserRound } from "lucide-react";
 
 const categories: { name: string; }[] = [
     { name: "Music" },
@@ -78,7 +78,7 @@ export default function Navbar() {
                         </NavigationMenuList>
 
                         {/* Main Navigation */}
-                        <NavigationMenuList className=" gap-6 grow">
+                        <NavigationMenuList className="gap-6 grow">
                             <NavigationMenuItem>
                                 <NavigationMenuLink href="/" className="h-9 px-4 py-2 rounded-md bg-background hover:bg-accent hover:text-accent-foreground transition-colors">
                                     Home
@@ -93,7 +93,7 @@ export default function Navbar() {
 
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger className="h-9">
-                                    <NavigationMenuLink href="/categories">
+                                    <NavigationMenuLink>
                                         Categories
                                     </NavigationMenuLink>
                                 </NavigationMenuTrigger>
@@ -112,7 +112,7 @@ export default function Navbar() {
 
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger className="h-9">
-                                    <NavigationMenuLink href="/brands">
+                                    <NavigationMenuLink>
                                         Brands
                                     </NavigationMenuLink>
                                 </NavigationMenuTrigger>
@@ -134,7 +134,7 @@ export default function Navbar() {
                             <NavigationMenuItem>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger className="flex gap-1 items-center">
-                                        <Image src="/assets/icons/user.svg" alt="User Icon" width={20} height={20} />
+                                        <UserRound/>
                                         <ChevronDown className="size-4" />
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent>
@@ -168,7 +168,7 @@ export default function Navbar() {
 
                             <NavigationMenuItem>
                                 <NavigationMenuLink href="/cart">
-                                    <Image src="/assets/icons/cart.svg" alt="Cart Icon" width={20} height={20} />
+                                <ShoppingCart/>
                                 </NavigationMenuLink>
                             </NavigationMenuItem>
                         </NavigationMenuList>

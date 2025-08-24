@@ -41,7 +41,7 @@ export default function Footer() {
                             <h3 className="mb-3 opacity-50">Newsletter</h3>
                             <p>Want to get notified with our new products?</p>
                             <form className="flex gap-2.5 mt-4">
-                                <Input type="email" placeholder="Enter your email" />
+                                <Input type="email" placeholder="Subscribe to Newsletter" />
                                 <Button type="submit">Subscribe</Button>
                             </form>
                         </div>
