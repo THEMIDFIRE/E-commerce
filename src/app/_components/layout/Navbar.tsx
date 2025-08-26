@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
@@ -185,10 +185,12 @@ export default function Navbar() {
                                             </Accordion>
                                             <SheetFooter>
                                                 <Link href="/account">My Account</Link>
-                                                <Link href="/cart">My Cart</Link>
                                                 <Link href="/orders">My Orders</Link>
                                                 <Link href="/wishlist">My Wishlist</Link>
-                                                <Link href="#">Log out</Link>
+                                                <Link href="/cart">My Cart</Link>
+                                                <Button
+                                                // onClick={() => signOut()}
+                                                >Logout</Button>
                                             </SheetFooter>
                                         </SheetContent>
                                     </Sheet>

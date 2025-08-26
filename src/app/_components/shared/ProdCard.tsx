@@ -1,3 +1,4 @@
+"use client"
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { HeartIcon, ShoppingCart, StarIcon } from "lucide-react";
 
