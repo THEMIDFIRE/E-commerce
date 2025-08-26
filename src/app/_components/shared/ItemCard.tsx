@@ -1,7 +1,7 @@
 "use client"
 import { Card, CardTitle } from "@/components/ui/card";
 
-export default function CatCard() {
+export default function ItemCard() {
     return (
         <>
         <Card className="p-0 rounded-2xl overflow-hidden relative shadow-md">

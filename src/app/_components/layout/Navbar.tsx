@@ -100,7 +100,7 @@ export default function Navbar() {
                                 </NavigationMenuItem>
                                 <NavigationMenuItem>
                                     <NavigationMenuTrigger className="h-9">
-                                        <NavigationMenuLink>
+                                        <NavigationMenuLink href="/categories">
                                             Categories
                                         </NavigationMenuLink>
                                     </NavigationMenuTrigger>
@@ -118,7 +118,7 @@ export default function Navbar() {
                                 </NavigationMenuItem>
                                 <NavigationMenuItem>
                                     <NavigationMenuTrigger className="h-9">
-                                        <NavigationMenuLink>
+                                        <NavigationMenuLink href="/brands">
                                             Brands
                                         </NavigationMenuLink>
                                     </NavigationMenuTrigger>
@@ -155,7 +155,9 @@ export default function Navbar() {
                                             <Link href="/products">Products</Link>
                                             <Accordion type="single" collapsible>
                                                 <AccordionItem value="item-1" className="border-b-0 mb-4">
-                                                    <AccordionTrigger className="text-[16px] p-0">Categories</AccordionTrigger>
+                                                    <AccordionTrigger className="text-[16px] p-0">
+                                                        <Link href="/categories">Categories</Link>
+                                                    </AccordionTrigger>
                                                     <AccordionContent className="grid grid-cols-2 gap-4 mt-2">
                                                         {categories.map((category) => (
                                                             <Link
@@ -169,7 +171,9 @@ export default function Navbar() {
                                                     </AccordionContent>
                                                 </AccordionItem>
                                                 <AccordionItem value="item-2" className="">
-                                                    <AccordionTrigger className="text-[16px] p-0 border-none">Brands</AccordionTrigger>
+                                                    <AccordionTrigger className="text-[16px] p-0 border-none">
+                                                        <Link href="/brands">Brands</Link>
+                                                    </AccordionTrigger>
                                                     <AccordionContent className="grid grid-cols-2 gap-4 mt-2">
                                                         {brands.map((brand) => (
                                                             <NavigationMenuLink
