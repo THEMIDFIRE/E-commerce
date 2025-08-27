@@ -4,11 +4,8 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { IProduct } from "@/app/types/product.type";
 
-interface FeaturedProps {
-    products: IProduct[];
-}
 
-export default function Featured({ products }: FeaturedProps) {
+export default function Featured({ products }: { products: IProduct[] }) {
     return (
         <section className="bg-gray-50">
             <div className="container py-16 max-w-4/5 mx-auto">

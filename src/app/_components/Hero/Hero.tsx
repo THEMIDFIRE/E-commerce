@@ -10,9 +10,11 @@ export default function Hero() {
                 <p className="text-xl mb-8 max-w-2xl mx-auto">
                     Shop the latest trends and find everything you need in one place
                 </p>
-                <Button size="lg" variant="secondary">
-                    <Link href="/products">Shop Now</Link>
-                </Button>
+                <Link href="/products">
+                    <Button size="lg" variant="secondary">
+                        Shop Now
+                    </Button>
+                </Link>
             </div>
         </section>
     )

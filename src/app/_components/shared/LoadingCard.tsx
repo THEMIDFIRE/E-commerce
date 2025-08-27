@@ -8,7 +8,7 @@ export default function LoadingCard() {
         <>
             <Card className="py-4 hover:shadow-lg transition-shadow duration-300">
                 <div className="bg-gray-100 rounded-2xl relative mx-4 shadow-sm">
-                    <div className="shadow-sm">
+                    <div className="min-h-52 bg-gray-100 rounded-2xl relative mx-4 shadow-sm">
                         <Skeleton className="aspect-square h-52 rounded-2xl" />
                     </div>
                     <div className="absolute bottom-2.5 right-2.5 flex gap-2.5">
@@ -22,10 +22,10 @@ export default function LoadingCard() {
                 </div>
                 <CardHeader>
                     <CardTitle className="text-xl line-clamp-1">
-                        <Skeleton className="w-1/2 h-5" />
+                        <Skeleton className="w-12 h-5" />
                     </CardTitle>
                     <CardDescription className="flex items-center gap-1.5">
-                        <Skeleton className="w-5 h-5" />
+                        <Skeleton className="w-7 h-5" />
                         <Skeleton className="w-5 h-5" />
                     </CardDescription>
                 </CardHeader>
