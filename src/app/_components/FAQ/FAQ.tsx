@@ -46,7 +46,8 @@ export default function FAQ() {
                                     <AccordionContent>{faq.answer}</AccordionContent>
                                 </AccordionItem>
                             ))}
-                        </Accordion>                    </div>
+                        </Accordion>
+                    </div>
                 </div>
             </div>
         </section>
