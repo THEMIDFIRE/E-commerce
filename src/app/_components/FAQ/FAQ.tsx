@@ -4,6 +4,25 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function FAQ() {
+    const faqs = [
+        {
+            question: "What is your return policy?",
+            answer: "We offer a 30-day return policy for all items in original condition.",
+        },
+        {
+            question: "How long does shipping take?",
+            answer: "Standard shipping takes 3-5 business days, while express shipping takes 1-2 business days.",
+        },
+        {
+            question: "Do you offer international shipping?",
+            answer: "Yes, we ship to most countries worldwide. Shipping costs and times vary by location.",
+        },
+        {
+            question: "How can I track my order?",
+            answer: "Once your order ships, you'll receive a tracking number via email to monitor your package.",
+        },
+    ]
+
     return (
         <section>
             <div className="container py-16 max-w-4/5 mx-auto">
@@ -20,57 +39,14 @@ export default function FAQ() {
                         </Button>
                     </div>
                     <div>
-                        <Accordion
-                            type="single"
-                            collapsible
-                            className="w-full"
-                            defaultValue="item-1"
-                        >
-                            <AccordionItem value="item-1">
-                                <AccordionTrigger>Product Information</AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-4 text-balance">
-                                    <p>
-                                        Our flagship product combines cutting-edge technology with sleek
-                                        design. Built with premium materials, it offers unparalleled
-                                        performance and reliability.
-                                    </p>
-                                    <p>
-                                        Key features include advanced processing capabilities, and an
-                                        intuitive user interface designed for both beginners and experts.
-                                    </p>
-                                </AccordionContent>
-                            </AccordionItem>
-                            <AccordionItem value="item-2">
-                                <AccordionTrigger>Shipping Details</AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-4 text-balance">
-                                    <p>
-                                        We offer worldwide shipping through trusted courier partners.
-                                        Standard delivery takes 3-5 business days, while express shipping
-                                        ensures delivery within 1-2 business days.
-                                    </p>
-                                    <p>
-                                        All orders are carefully packaged and fully insured. Track your
-                                        shipment in real-time through our dedicated tracking portal.
-                                    </p>
-                                </AccordionContent>
-                            </AccordionItem>
-                            <AccordionItem value="item-3">
-                                <AccordionTrigger>Return Policy</AccordionTrigger>
-                                <AccordionContent className="flex flex-col gap-4 text-balance">
-                                    <p>
-                                        We stand behind our products with a comprehensive 30-day return
-                                        policy. If you&apos;re not completely satisfied, simply return the
-                                        item in its original condition.
-                                    </p>
-                                    <p>
-                                        Our hassle-free return process includes free return shipping and
-                                        full refunds processed within 48 hours of receiving the returned
-                                        item.
-                                    </p>
-                                </AccordionContent>
-                            </AccordionItem>
-                        </Accordion>
-                    </div>
+                        <Accordion type="single" collapsible className="w-full">
+                            {faqs.map((faq, index) => (
+                                <AccordionItem key={index} value={`item-${index}`}>
+                                    <AccordionTrigger>{faq.question}</AccordionTrigger>
+                                    <AccordionContent>{faq.answer}</AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>                    </div>
                 </div>
             </div>
         </section>
