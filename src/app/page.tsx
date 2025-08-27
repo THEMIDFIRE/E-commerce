@@ -5,10 +5,11 @@ import Featured from "./_components/Featured/Featured";
 import Hero from "./_components/Hero/Hero";
 import Popular from "./_components/Popular/Popular";
 import { IProduct } from "./types/product.type";
+import { getAllCategories } from "@/lib/categories";
 
 export default async function Home() {
   const products = await getAllProducts()
-  console.log('data', products)
+  const categories = await getAllCategories()
 
   const popularProducts = products
     .sort((a: { ratingsAverage: number; }, b: { ratingsAverage: number; }) => b.ratingsAverage - a.ratingsAverage)
@@ -22,7 +23,7 @@ export default async function Home() {
     <>
       <Hero />
       <Featured products={featuredProducts} />
-      <Categories />
+      <Categories category={categories} />
       <Popular products={popularProducts} />
       <FAQ />
     </>

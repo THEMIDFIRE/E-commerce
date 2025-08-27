@@ -4,7 +4,6 @@ import { getAllCategories } from "@/lib/categories";
 
 export default async function AllCategories() {
     const data = await getAllCategories();
-    console.log('data', data)
     return (
         <section>
             <div className="container py-16 max-w-4/5 mx-auto">
