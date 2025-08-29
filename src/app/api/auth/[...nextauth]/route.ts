@@ -23,7 +23,7 @@ const handler = NextAuth({
                 })
                 const data = await res.json()
                 if (res.ok) {
-                    return { id: data?.id, name: data.name }
+                    return { id: data.user.id, user: data.user, token: data.token }
                 } else {
                     throw Error(data.message || 'Failed to login')
                 }
