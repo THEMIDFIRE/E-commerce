@@ -11,19 +11,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { ICategory } from "@/app/types/category.type";
 
-const categories: { name: string; }[] = [
-    { name: "Music" },
-    { name: "Men's Fashion" },
-    { name: "Women's Fashion" },
-    { name: "SuperMarket" },
-    { name: "Baby & Toys" },
-    { name: "Home" },
-    { name: "Books" },
-    { name: "Beauty & Health" },
-    { name: "Mobiles" },
-    { name: "Electronics" }
-]
+// const categories: { name: string; }[] = [
+//     { name: "Music" },
+//     { name: "Men's Fashion" },
+//     { name: "Women's Fashion" },
+//     { name: "SuperMarket" },
+//     { name: "Baby & Toys" },
+//     { name: "Home" },
+//     { name: "Books" },
+//     { name: "Beauty & Health" },
+//     { name: "Mobiles" },
+//     { name: "Electronics" }
+// ]
 
 const brands: { name: string; }[] = [
     { "name": "Canon" },
@@ -68,7 +69,7 @@ const brands: { name: string; }[] = [
     { "name": "Maybelline" }
 ]
 
-export default function Navbar() {
+export default function Navbar({ categories }: { categories: ICategory[] }) {
     return (
         <>
             <header>
@@ -108,7 +109,7 @@ export default function Navbar() {
                                         {categories.map((category) => (
                                             <NavigationMenuLink
                                                 key={category.name}
-                                                href={"/categories/" + category.name.toLowerCase()}
+                                                href={`/categories/${category._id}`}
                                                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                                             >
                                                 <div className="text-sm font-medium leading-none">{category.name}</div>

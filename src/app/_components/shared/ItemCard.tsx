@@ -18,7 +18,7 @@ export function CatCard({ category }: { category: ICategory }) {
         <>
             <Link href={`/categories/${category._id}`}>
                 <Card className="p-5 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                    <div className="img h-52 w-full px-5">
+                    <div className="img h-52 w-full px-5 bg-accent rounded-xl">
                         <img src={category.image} alt={category.name} className="w-full h-full object-contain" />
                     </div>
                     <CardTitle className="text-center">{category.name}</CardTitle>

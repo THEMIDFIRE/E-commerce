@@ -1,7 +1,10 @@
+import { getSpecificCategory } from '@/lib/categories'
 import React from 'react'
 
-export default function Category() {
+export default async function Category({ params }: { params: { id: string } }) {
+    const id = await params.id
+    const data = await getSpecificCategory(id)
     return (
-        <div>Category</div>
+        <div>Category: {id}</div>
     )
 }
