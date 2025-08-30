@@ -2,74 +2,18 @@
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
-import Image from "next/image";
 
-import { ChevronDown, Menu, ShoppingCart, UserRound } from "lucide-react";
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { IBrand, ICategory } from "@/app/types/All.type";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ICategory } from "@/app/types/category.type";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { ChevronDown, Heart, Menu, ShoppingBag, ShoppingCart, UserCogIcon, UserRound } from "lucide-react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 
-// const categories: { name: string; }[] = [
-//     { name: "Music" },
-//     { name: "Men's Fashion" },
-//     { name: "Women's Fashion" },
-//     { name: "SuperMarket" },
-//     { name: "Baby & Toys" },
-//     { name: "Home" },
-//     { name: "Books" },
-//     { name: "Beauty & Health" },
-//     { name: "Mobiles" },
-//     { name: "Electronics" }
-// ]
+export default function Navbar({ categories, brands }: { categories: ICategory[], brands: IBrand[] }) {
+    const { data: session } = useSession();
 
-const brands: { name: string; }[] = [
-    { "name": "Canon" },
-    { "name": "Dell" },
-    { "name": "Lenovo" },
-    { "name": "SONY" },
-    { "name": "Infinix" },
-    { "name": "Realme" },
-    { "name": "HONOR" },
-    { "name": "Nokia" },
-    { "name": "OPPO" },
-    { "name": "Huawei" },
-    { "name": "Apple" },
-    { "name": "Xiaomi" },
-    { "name": "Samsung" },
-    { "name": "Jack & Jones" },
-    { "name": "LC Waikiki" },
-    { "name": "Andora" },
-    { "name": "Puma" },
-    { "name": "Skechers" },
-    { "name": "Reserved" },
-    { "name": "Reebok" },
-    { "name": "Adidas" },
-    { "name": "Nike" },
-    { "name": "DeFacto" },
-    { "name": "Beko" },
-    { "name": "Kenwood" },
-    { "name": "Black + Decker" },
-    { "name": "Mienta" },
-    { "name": "Fresh" },
-    { "name": "Philips" },
-    { "name": "Toshiba" },
-    { "name": "Tornado" },
-    { "name": "Braun" },
-    { "name": "Garnier" },
-    { "name": "Essence" },
-    { "name": "Bourjois" },
-    { "name": "Kemei" },
-    { "name": "Carolina Herrera" },
-    { "name": "Calvin Klein" },
-    { "name": "Loreal" },
-    { "name": "Maybelline" }
-]
-
-export default function Navbar({ categories }: { categories: ICategory[] }) {
     return (
         <>
             <header>
@@ -152,8 +96,8 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
                                             <SheetHeader>
                                                 <SheetTitle className="sr-only">Menu</SheetTitle>
                                             </SheetHeader>
-                                            <Link href="/">Home</Link>
-                                            <Link href="/products">Products</Link>
+                                            <Link href="/" className="block py-2">Home</Link>
+                                            <Link href="/products" className="block py-2">Products</Link>
                                             <Accordion type="single" collapsible>
                                                 <AccordionItem value="item-1" className="border-b-0 mb-4">
                                                     <AccordionTrigger className="text-[16px] p-0">
@@ -163,7 +107,7 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
                                                         {categories.map((category) => (
                                                             <Link
                                                                 key={category.name}
-                                                                href={"/categories/" + category.name.toLowerCase()}
+                                                                href={`/categories/${category._id}`}
                                                                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                                                             >
                                                                 <div className="text-sm font-medium leading-none">{category.name}</div>
@@ -177,25 +121,31 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
                                                     </AccordionTrigger>
                                                     <AccordionContent className="grid grid-cols-2 gap-4 mt-2">
                                                         {brands.map((brand) => (
-                                                            <NavigationMenuLink
+                                                            <Link
                                                                 key={brand.name}
                                                                 href={"/brands/" + brand.name.toLowerCase()}
                                                                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                                                             >
                                                                 <div className="text-sm font-medium leading-none">{brand.name}</div>
-                                                            </NavigationMenuLink>
+                                                            </Link>
                                                         ))}
                                                     </AccordionContent>
                                                 </AccordionItem>
                                             </Accordion>
-                                            <SheetFooter>
-                                                <Link href="/account">My Account</Link>
-                                                <Link href="/orders">My Orders</Link>
-                                                <Link href="/wishlist">My Wishlist</Link>
-                                                <Link href="/cart">My Cart</Link>
-                                                <Button
-                                                // onClick={() => signOut()}
-                                                >Logout</Button>
+                                            <SheetFooter className="flex flex-col gap-2 mt-6">
+                                                {session ? (
+                                                    <>
+                                                        <Link href="/account" className="block py-2">My Account</Link>
+                                                        <Link href="/orders" className="block py-2">My Orders</Link>
+                                                        <Link href="/wishlist" className="block py-2">My Wishlist</Link>
+                                                        <Link href="/cart" className="block py-2">My Cart</Link>
+                                                        <Button onClick={() => signOut()}>
+                                                            Logout
+                                                        </Button>
+                                                    </>
+                                                ) : (
+                                                    <Link href="/login" className="block py-2">Login</Link>
+                                                )}
                                             </SheetFooter>
                                         </SheetContent>
                                     </Sheet>
@@ -204,49 +154,62 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
                         </div>
 
                         <div className="order-3 md:order-4">
-                            <NavigationMenuList className="md:gap--x-2 hidden md:flex">
-                                <NavigationMenuItem>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger className="flex gap-1 items-center">
+                            <NavigationMenuList className="md:gap-x-2 hidden md:flex">
+                                {session ? (
+                                    <NavigationMenuItem>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger className="flex gap-1 items-center">
+                                                <UserRound />
+                                                <ChevronDown className="size-4" />
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuLabel>
+                                                    <p>{session.user?.name || 'User'}</p>
+                                                </DropdownMenuLabel>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem asChild>
+                                                    <NavigationMenuLink href="/account">
+                                                        <UserCogIcon/> My Account
+                                                    </NavigationMenuLink>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <NavigationMenuLink href="/orders">
+                                                        <ShoppingBag/> My Orders
+                                                    </NavigationMenuLink>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <NavigationMenuLink href="/wishlist">
+                                                        <Heart/> My Wishlist
+                                                    </NavigationMenuLink>
+                                                </DropdownMenuItem>
+                                                <NavigationMenuItem asChild>
+                                                    <NavigationMenuLink href="/cart">
+                                                        <ShoppingCart /> My Cart
+                                                    </NavigationMenuLink>
+                                                </NavigationMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        className="w-full justify-start p-0 h-auto font-normal"
+                                                        onClick={() => signOut()}
+                                                    >
+                                                        Log out
+                                                    </Button>
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </NavigationMenuItem>
+                                ) : (
+                                    <NavigationMenuItem>
+                                        <Link href="/login" className="flex gap-1 items-center">
                                             <UserRound />
-                                            <ChevronDown className="size-4" />
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuLabel>
-                                                <p>John Doe</p>
-                                            </DropdownMenuLabel>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem>
-                                                <NavigationMenuLink href={"/account"}>
-                                                    My Account
-                                                </NavigationMenuLink>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                <NavigationMenuLink href={"/orders"}>
-                                                    My Orders
-                                                </NavigationMenuLink>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                <NavigationMenuLink href={"/wishlist"}>
-                                                    My Wishlist
-                                                </NavigationMenuLink>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                <NavigationMenuLink>
-                                                    Log out
-                                                </NavigationMenuLink>
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </NavigationMenuItem>
-                                <NavigationMenuItem>
-                                    <NavigationMenuLink href="/cart">
-                                        <ShoppingCart />
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
+                                            Login
+                                        </Link>
+                                    </NavigationMenuItem>
+                                )}
+
                             </NavigationMenuList>
                         </div>
-
                     </NavigationMenu>
                 </div>
             </header>

@@ -1,7 +1,7 @@
 export interface IProduct {
     sold:            number;
     images:          string[];
-    subcategory:     Brand[];
+    subcategory:     IBrand[];
     ratingsQuantity: number;
     _id:             string;
     title:           string;
@@ -10,8 +10,8 @@ export interface IProduct {
     quantity:        number;
     price:           number;
     imageCover:      string;
-    category:        Brand;
-    brand:           Brand;
+    category:        IBrand;
+    brand:           IBrand;
     ratingsAverage:  number;
     createdAt:       string;
     updatedAt:       string;
@@ -20,7 +20,7 @@ export interface IProduct {
 export interface ICustomProduct {
     sold:            number;
     images:          string[];
-    subcategory:     Brand[];
+    subcategory:     IBrand[];
     ratingsQuantity: number;
     _id:             string;
     title:           string;
@@ -29,8 +29,8 @@ export interface ICustomProduct {
     quantity:        number;
     price:           number;
     imageCover:      string;
-    category:        Brand;
-    brand:           Brand;
+    category:        IBrand;
+    brand:           IBrand;
     ratingsAverage:  number;
     createdAt:       string;
     updatedAt:       string;
@@ -39,11 +39,22 @@ export interface ICustomProduct {
     id:              string;
 }
 
-
-export interface Brand {
+export interface IBrand {
     _id:       string;
     name:      string;
     slug:      string;
-    image?:    string;
+    image:     string;
     category?: string;
+    createdAt: string;
+    updatedAt: string;
 }
+
+export interface ICategory {
+    _id:       string;
+    name:      string;
+    slug:      string;
+    image:     string;
+    createdAt: string;
+    updatedAt: string;
+}
+

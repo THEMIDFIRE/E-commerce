@@ -1,11 +1,10 @@
-import { getAllProducts } from "@/lib/products";
+import { getAllCategories, getAllProducts } from "@/lib/api";
 import Categories from "./_components/Categories/Categories";
 import FAQ from "./_components/FAQ/FAQ";
 import Featured from "./_components/Featured/Featured";
 import Hero from "./_components/Hero/Hero";
 import Popular from "./_components/Popular/Popular";
-import { IProduct } from "./types/product.type";
-import { getAllCategories } from "@/lib/categories";
+import { IProduct } from "./types/All.type";
 
 export default async function Home() {
   const products = await getAllProducts()

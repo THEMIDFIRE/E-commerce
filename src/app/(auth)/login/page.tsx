@@ -30,7 +30,7 @@ export default function Login() {
     })
 
     const onSubmit = async (data: LoginForm) => {
-        const res = await signIn('credentials', { email: data.email, password: data.password, redirect: false })
+        const res = await signIn('credentials', { email: data.email, password: data.password, redirect: false, callbackUrl: '/' })
         if (!res?.ok) {
             toast.error(res?.error)
         } else {

@@ -1,16 +1,10 @@
 import Filters from '@/app/_components/Filter/Filters';
-import ProdCard from '@/app/_components/shared/ProdCard';
-import { IProduct } from '@/app/types/product.type';
-import { Checkbox } from '@/components/ui/checkbox';
+import { IProduct } from '@/app/types/All.type';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { getAllProducts } from '@/lib/api';
 import { Suspense } from 'react';
-import Loading from '../../_components/shared/SkeletonProducts';
-import Skeleton from '../../_components/shared/SkeletonProducts';
 import SkeletonProducts from '../../_components/shared/SkeletonProducts';
-import { getAllProducts } from '@/lib/products';
+import { ProdCard } from '@/app/_components/shared/AllCards';
 
 
 export default async function Products() {

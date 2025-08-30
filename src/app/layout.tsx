@@ -1,10 +1,11 @@
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { Oxygen } from "next/font/google";
+import Footer from "./_components/layout/Footer";
 import Navbar from "./_components/layout/Navbar";
 import "./globals.css";
-import Footer from "./_components/layout/Footer";
-import { getAllCategories } from "@/lib/categories";
-import { Toaster } from "@/components/ui/sonner";
+import Providers from "./Providers";
+import { getAllBrands, getAllCategories } from "@/lib/api";
 
 const oxygen = Oxygen({
   subsets: ["latin"],
@@ -20,16 +21,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const data = await getAllCategories();
+  const categories = await getAllCategories();
+  const brands = await getAllBrands();
   return (
     <html lang="en">
       <body className={`${oxygen.className} antialiased`}>
-        <Navbar categories={data} />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
-        <Toaster position="top-right"/>
+        <Providers>
+          <Navbar categories={categories} brands={brands} />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+          <Toaster position="top-right" />
+        </Providers>
       </body>
     </html>
   );

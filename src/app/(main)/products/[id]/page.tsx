@@ -1,5 +1,5 @@
 import ProductDetails from '@/app/_components/ProductDetaails/ProductDetails'
-import { getSpecificProduct } from '@/lib/products'
+import { getSpecificProduct } from '@/lib/api'
 
 export default async function CustomProduct({ params }: { params: { id: string } }) {
     const id = await params.id

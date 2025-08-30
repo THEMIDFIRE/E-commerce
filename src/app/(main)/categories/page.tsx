@@ -1,6 +1,6 @@
-import { CatCard } from "@/app/_components/shared/ItemCard";
-import { ICategory } from "@/app/types/category.type";
-import { getAllCategories } from "@/lib/categories";
+import { CatCard } from "@/app/_components/shared/AllCards";
+import { ICategory } from "@/app/types/All.type";
+import { getAllCategories } from "@/lib/api";
 
 export default async function AllCategories() {
     const data = await getAllCategories();

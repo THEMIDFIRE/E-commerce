@@ -4,18 +4,6 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 
 export default function Footer() {
-    // products section:
-    // latest products (created at)
-    // all products
-    // popular products (most sold)
-    // featured products (rating)
-
-    // legal pages:
-    // privacy policy
-    // terms and conditions
-
-    // categories:
-    // brands:
     return (
         <>
             <footer className="bg-primary text-primary-foreground text-lg">

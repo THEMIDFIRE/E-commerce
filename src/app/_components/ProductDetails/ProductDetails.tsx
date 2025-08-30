@@ -1,5 +1,5 @@
 "use client"
-import { ICustomProduct } from '@/app/types/product.type';
+import { ICustomProduct } from '@/app/types/All.type';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, type CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';

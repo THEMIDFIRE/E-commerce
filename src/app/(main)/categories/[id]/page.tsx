@@ -1,4 +1,4 @@
-import { getSpecificCategory } from '@/lib/categories'
+import { getSpecificCategory } from '@/lib/api'
 import React from 'react'
 
 export default async function Category({ params }: { params: { id: string } }) {

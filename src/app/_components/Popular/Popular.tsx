@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import ProdCard from "../shared/ProdCard";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { IProduct } from "@/app/types/product.type";
+import { IProduct } from "@/app/types/All.type";
+import { ProdCard } from "../shared/AllCards";
 
 
 export default function Popular({ products }: { products: IProduct[] }) {
