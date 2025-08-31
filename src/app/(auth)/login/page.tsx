@@ -11,43 +11,59 @@ import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { PulseLoader } from "react-spinners"
 
 const formSchema = z.object({
-    email: z.email(),
-    password: z.string().min(8)
+    email: z.string().email("Please enter a valid email"),
+    password: z.string().min(8, "Password must be at least 8 characters")
 })
 type LoginForm = z.infer<typeof formSchema>
 
 export default function Login() {
-
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
 
-    const form = useForm({
-        resolver: zodResolver(formSchema), defaultValues: {
+    const form = useForm<LoginForm>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
             email: '',
             password: ''
         }
     })
 
     const onSubmit = async (data: LoginForm) => {
-        const res = await signIn('credentials', { email: data.email, password: data.password, redirect: false, callbackUrl: '/' })
-        if (!res?.ok) {
-            toast.error(res?.error)
-        } else {
-            toast.success('Login successful')
-            router.replace('/')
+        try {
+            setIsLoading(true)
+            const res = await signIn('credentials', {
+                email: data.email,
+                password: data.password,
+                redirect: false,
+                callbackUrl: '/'
+            })
+
+            if (!res?.ok) {
+                toast.error(res?.error || "Invalid credentials")
+            } else {
+                toast.success('Login successful')
+                router.replace('/')
+            }
+            console.log('res', res)
+        } catch (error) {
+            toast.error("Something went wrong")
+        } finally {
+            setIsLoading(false)
         }
-        console.log('res', res)
     }
 
     return (
         <section className="py-20">
-            <div className="container max-w-2/3 md:max-w-1/2 lg:max-w-1/3 mx-auto">
+            <div className="container max-w-4/5 md:max-w-1/2 lg:max-w-1/3 mx-auto">
                 <div className="inner border-2 rounded-lg px-10 py-8">
                     <h2 className="text-4xl font-bold mb-4">Login</h2>
                     <p className="text-gray-400">Don't have an account? <Link href="/register" className="text-primary underline">Register</Link></p>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-10 text-center">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-10">
                             <FormField
                                 control={form.control}
                                 name="email"
@@ -74,8 +90,16 @@ export default function Login() {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full">Login</Button>
-                            <Link href="/forgot-password" className="text-primary underline">Forgot password?</Link>
+                            <Button type="submit" className="w-full" disabled={isLoading}>
+                                {isLoading ? (
+                                    <PulseLoader color="#fff" size={8} />
+                                ) : (
+                                    "Login"
+                                )}
+                            </Button>
+                            <div className="text-center">
+                                <Link href="/forgot-password" className="text-primary underline">Forgot password?</Link>
+                            </div>
                         </form>
                     </Form>
                 </div>

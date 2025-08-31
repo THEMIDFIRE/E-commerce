@@ -10,9 +10,10 @@ import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger
 import { ChevronDown, Heart, Menu, ShoppingBag, ShoppingCart, UserCogIcon, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { stat } from "fs";
 
 export default function Navbar({ categories, brands }: { categories: ICategory[], brands: IBrand[] }) {
-    const { data: session } = useSession();
+    const { status, data } = useSession();
 
     return (
         <>
@@ -96,8 +97,8 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                                             <SheetHeader>
                                                 <SheetTitle className="sr-only">Menu</SheetTitle>
                                             </SheetHeader>
-                                            <Link href="/" className="block py-2">Home</Link>
-                                            <Link href="/products" className="block py-2">Products</Link>
+                                            <Link href="/">Home</Link>
+                                            <Link href="/products">Products</Link>
                                             <Accordion type="single" collapsible>
                                                 <AccordionItem value="item-1" className="border-b-0 mb-4">
                                                     <AccordionTrigger className="text-[16px] p-0">
@@ -115,7 +116,7 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                                                         ))}
                                                     </AccordionContent>
                                                 </AccordionItem>
-                                                <AccordionItem value="item-2" className="">
+                                                <AccordionItem value="item-2">
                                                     <AccordionTrigger className="text-[16px] p-0 border-none">
                                                         <Link href="/brands">Brands</Link>
                                                     </AccordionTrigger>
@@ -132,16 +133,16 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                                                     </AccordionContent>
                                                 </AccordionItem>
                                             </Accordion>
-                                            <SheetFooter className="flex flex-col gap-2 mt-6">
-                                                {session ? (
+                                            <SheetFooter className="space-y-2">
+                                                {status === "authenticated" ? (
                                                     <>
-                                                        <Link href="/account" className="block py-2">My Account</Link>
-                                                        <Link href="/orders" className="block py-2">My Orders</Link>
-                                                        <Link href="/wishlist" className="block py-2">My Wishlist</Link>
-                                                        <Link href="/cart" className="block py-2">My Cart</Link>
-                                                        <Button onClick={() => signOut()}>
-                                                            Logout
-                                                        </Button>
+                                                        <Link href="/account">My Account</Link>
+                                                        <Link href="/orders">My Orders</Link>
+                                                        <Link href="/wishlist">My Wishlist</Link>
+                                                        <Link href="/cart">My Cart</Link>
+                                                        <Button
+                                                        onClick={() => signOut()}
+                                                        >Logout</Button>
                                                     </>
                                                 ) : (
                                                     <Link href="/login" className="block py-2">Login</Link>
@@ -155,44 +156,40 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
 
                         <div className="order-3 md:order-4">
                             <NavigationMenuList className="md:gap-x-2 hidden md:flex">
-                                {session ? (
+                                {status === "authenticated" ? (
                                     <NavigationMenuItem>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger className="flex gap-1 items-center">
                                                 <UserRound />
                                                 <ChevronDown className="size-4" />
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
+                                            <DropdownMenuContent className="w-56 p-4 space-y-2.5">
                                                 <DropdownMenuLabel>
-                                                    <p>{session.user?.name || 'User'}</p>
+                                                    <p>{data.user?.name || 'User'}</p>
                                                 </DropdownMenuLabel>
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem asChild>
-                                                    <NavigationMenuLink href="/account">
-                                                        <UserCogIcon/> My Account
+                                                    <NavigationMenuLink href="/account" className="flex-row items-center gap-2">
+                                                        <UserCogIcon /> My Account
                                                     </NavigationMenuLink>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem asChild>
-                                                    <NavigationMenuLink href="/orders">
-                                                        <ShoppingBag/> My Orders
+                                                    <NavigationMenuLink href="/orders" className="flex-row items-center gap-2">
+                                                        <ShoppingBag /> My Orders
                                                     </NavigationMenuLink>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem asChild>
-                                                    <NavigationMenuLink href="/wishlist">
-                                                        <Heart/> My Wishlist
+                                                    <NavigationMenuLink href="/wishlist" className="flex-row items-center gap-2">
+                                                        <Heart /> My Wishlist
                                                     </NavigationMenuLink>
                                                 </DropdownMenuItem>
-                                                <NavigationMenuItem asChild>
-                                                    <NavigationMenuLink href="/cart">
+                                                <DropdownMenuItem asChild>
+                                                    <NavigationMenuLink href="/cart" className="flex-row items-center gap-2">
                                                         <ShoppingCart /> My Cart
                                                     </NavigationMenuLink>
-                                                </NavigationMenuItem>
+                                                </DropdownMenuItem>
                                                 <DropdownMenuItem asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        className="w-full justify-start p-0 h-auto font-normal"
-                                                        onClick={() => signOut()}
-                                                    >
+                                                    <Button variant="destructive" className="w-full" onClick={() => signOut()}>
                                                         Log out
                                                     </Button>
                                                 </DropdownMenuItem>

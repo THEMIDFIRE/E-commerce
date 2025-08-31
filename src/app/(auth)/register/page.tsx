@@ -8,19 +8,32 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
+import { toast } from "sonner"
+import { useState } from "react"
+import { PulseLoader } from "react-spinners";
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
-    name: z.string(),
-    email: z.email(),
-    password: z.string().min(8),
-    rePassword: z.string().min(8),
-    phone: z.string(),
+    name: z.string().min(3, "Name must be at least 3 characters"),
+    email: z.string().email("Please enter a valid email"),
+    password: z.string().regex(/^[A-Z](?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/, 
+        "Password must start with uppercase, contain lowercase, number, special character, and be at least 9 characters"),
+    rePassword: z.string(),
+    phone: z.string().min(8, "Phone must be at least 8 characters"),
+}).refine((data) => data.password === data.rePassword, {
+    message: "Passwords don't match",
+    path: ["rePassword"],
 })
-type RegisteerForm = z.infer<typeof formSchema>
 
-export default function Login() {
-    const form = useForm({
-        resolver: zodResolver(formSchema), defaultValues: {
+type RegisterForm = z.infer<typeof formSchema>
+
+export default function Register() {
+    const [isLoading, setIsLoading] = useState(false)
+    const router = useRouter()
+    
+    const form = useForm<RegisterForm>({
+        resolver: zodResolver(formSchema), 
+        defaultValues: {
             name: '',
             email: '',
             password: '',
@@ -29,18 +42,43 @@ export default function Login() {
         }
     })
 
-    const onSubmit = (data: RegisteerForm) => {
+    const onSubmit = async (data: RegisterForm) => {
         console.log('data', data)
+        try {
+            setIsLoading(true)
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/signup`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            console.log('res', res)
+            
+            const result = await res.json()
+            
+            if (res.ok) {
+                toast.success("Account created successfully! Please login.")
+                router.push('/login')
+            } else {
+                toast.error(result.message || "Failed to create account")
+            }
+        } catch (error) {
+            console.error('Registration error:', error)
+            toast.error("Something went wrong")
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
         <section className="pt-10 pb-20">
-            <div className="container max-w-2/3 md:max-w-1/3 mx-auto">
+            <div className="container max-w-4/5 md:max-w-1/2 lg:max-w-1/3 mx-auto">
                 <div className="inner border-2 rounded-lg px-10 py-8">
                     <h2 className="text-4xl font-bold mb-4">Signup</h2>
                     <p className="text-gray-400">Have an account? <Link href="/login" className="text-primary underline">Login</Link></p>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-10 text-center">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-10">
                             <FormField
                                 control={form.control}
                                 name="name"
@@ -74,7 +112,7 @@ export default function Login() {
                                     <FormItem>
                                         <FormLabel>Phone</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Your Phone" type="text" {...field} />
+                                            <Input placeholder="Your Phone" type="tel" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -106,7 +144,13 @@ export default function Login() {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full">Create Account</Button>
+                            <Button type="submit" className="w-full" disabled={isLoading}>
+                                {isLoading ? (
+                                    <PulseLoader color="#fff" size={8} />
+                                ) : (
+                                    "Create Account"
+                                )}
+                            </Button>
                         </form>
                     </Form>
                 </div>

@@ -1,4 +1,4 @@
-import ProductDetails from '@/app/_components/ProductDetaails/ProductDetails'
+import ProductDetails from '@/app/_components/ProductDetails/ProductDetails'
 import { getSpecificProduct } from '@/lib/api'
 
 export default async function CustomProduct({ params }: { params: { id: string } }) {
