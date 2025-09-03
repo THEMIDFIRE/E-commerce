@@ -3,23 +3,25 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 
-import { IBrand, ICategory } from "@/app/types/All.type";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useCart } from "@/context/CartContext";
+import { IBrand, ICategory } from "@/types/All.type";
 import { ChevronDown, Heart, Menu, ShoppingBag, ShoppingCart, UserCogIcon, UserRound } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
-import { stat } from "fs";
 
 export default function Navbar({ categories, brands }: { categories: ICategory[], brands: IBrand[] }) {
     const { status, data } = useSession();
+    const {cartCount} = useCart();
 
     return (
         <>
-            <header>
+            <header className="shadow sticky top-0 z-50 bg-white">
                 <div className="container max-w-full">
-                    <NavigationMenu className="max-w-4/5 mx-auto justify-between py-10">
+                    <NavigationMenu className="max-w-4/5 mx-auto justify-between py-6">
                         {/* Logo Section */}
                         <div>
                             <NavigationMenuList>
@@ -141,7 +143,7 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                                                         <Link href="/wishlist">My Wishlist</Link>
                                                         <Link href="/cart">My Cart</Link>
                                                         <Button
-                                                        onClick={() => signOut()}
+                                                            onClick={() => signOut()}
                                                         >Logout</Button>
                                                     </>
                                                 ) : (
@@ -155,7 +157,18 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                         </div>
 
                         <div className="order-3 md:order-4">
-                            <NavigationMenuList className="md:gap-x-2 hidden md:flex">
+                            <NavigationMenuList className="md:gap-x-1.5 hidden md:flex items-center">
+                                <NavigationMenuItem>
+                                    <NavigationMenuLink href="/cart" aria-label="Cart" className="[&_svg:not([class*='size-'])]:size-5 relative">
+                                        <ShoppingCart className="text-black " width={40} height={40} />
+                                        { cartCount > 0 &&
+                                            <Badge className="size-4 rounded-full absolute top-0 right-0" variant="default">
+                                                {cartCount}
+                                            </Badge>
+                                        }
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+
                                 {status === "authenticated" ? (
                                     <NavigationMenuItem>
                                         <DropdownMenu>
@@ -184,11 +197,6 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                                                     </NavigationMenuLink>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem asChild>
-                                                    <NavigationMenuLink href="/cart" className="flex-row items-center gap-2">
-                                                        <ShoppingCart /> My Cart
-                                                    </NavigationMenuLink>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem asChild>
                                                     <Button variant="destructive" className="w-full" onClick={() => signOut()}>
                                                         Log out
                                                     </Button>
@@ -204,7 +212,6 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                                         </Link>
                                     </NavigationMenuItem>
                                 )}
-
                             </NavigationMenuList>
                         </div>
                     </NavigationMenu>

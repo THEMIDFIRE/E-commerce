@@ -1,4 +1,4 @@
-import { ICategory } from "@/app/types/All.type";
+import { ICategory } from "@/types/All.type";
 import { CatCard } from "../shared/AllCards";
 
 export default function Categories({ category }: { category: ICategory[] }) {

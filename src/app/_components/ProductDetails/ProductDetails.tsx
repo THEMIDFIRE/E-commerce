@@ -1,5 +1,4 @@
 "use client"
-import { ICustomProduct } from '@/app/types/All.type';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, type CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
@@ -7,18 +6,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
+import { ICustomProduct } from '@/types/All.type';
 import { HeartIcon, PackageIcon, SlashIcon, StarIcon, TruckIcon } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import Counter from '../shared/Counter';
+import { getUserToken } from '@/lib/server-utils';
+import { addToCart } from '@/lib/api';
+import { toast } from 'sonner';
+import { useCart } from '@/context/CartContext';
 
 export default function ProductDetails({ product }: { product: ICustomProduct }) {
-    const [api, setApi] = React.useState<CarouselApi>()
-    const [current, setCurrent] = React.useState(0)
-    const [count, setCount] = React.useState(0)
-
-    const [quantity, setQuantity] = useState(1);
-
-    const increment = () => setQuantity(prev => prev + 1);
-    const decrement = () => setQuantity(prev => Math.max(1, prev - 1));
+    const [api, setApi] = useState<CarouselApi>()
+    const [current, setCurrent] = useState(0)
+    const [count, setCount] = useState(0)
 
     useEffect(() => {
         if (!api) {
@@ -30,6 +30,21 @@ export default function ProductDetails({ product }: { product: ICustomProduct })
             setCurrent(api.selectedScrollSnap() + 1)
         })
     }, [api])
+
+    const { getCartData } = useCart();
+
+    const handleAddToCart = async () => {
+        const token = await getUserToken()
+        if (token) {
+            toast.promise(addToCart(product._id), {
+                loading: 'Adding to cart...',
+                success: 'Added to cart',
+                error: 'Failed to add'
+            })
+            getCartData();
+        }
+    }
+
 
 
     return (
@@ -79,31 +94,12 @@ export default function ProductDetails({ product }: { product: ICustomProduct })
                         <div>
                             <div className='flex items-center gap-3 my-4'>
                                 <div className="flex items-center border-2 rounded-full overflow-hidden w-fit">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={decrement}
-                                        disabled={quantity === 0}
-                                        className="px-4 h-8 hover:bg-gray-100 rounded-none"
-                                    >
-                                        −
-                                    </Button>
-                                    <span className="px-2 py-3.5 min-w-[50px] text-center text-sm bg-gray-50">
-                                        {quantity}
-                                    </span>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={increment}
-                                        className="px-4 h-8 hover:bg-gray-100 rounded-none"
-                                    >
-                                        +
-                                    </Button>
+                                    <Counter />
                                 </div>
-                                <Button className='grow rounded-3xl py-6 text-lg font-bold hover:bg-transparent hover:text-foreground hover:border-foreground hover:border-2'>Add to Cart</Button>
+                                <Button onClick={handleAddToCart} className='grow rounded-3xl py-4 text-lg font-bold hover:bg-transparent hover:text-foreground hover:border-foreground hover:border-2'>Add to Cart</Button>
                             </div>
                             <div>
-                                <Button className='w-full rounded-3xl py-6 border-2 border-accent-foreground bg-transparent text-accent-foreground font-bold text-lg hover:text-accent'>Buy Now</Button>
+                                <Button className='w-full rounded-3xl py-5 border-2 border-accent-foreground bg-transparent text-accent-foreground font-bold text-lg hover:text-accent'>Buy Now</Button>
                             </div>
                         </div>
                         <div className='mt-8'>

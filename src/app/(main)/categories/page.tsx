@@ -1,5 +1,5 @@
 import { CatCard } from "@/app/_components/shared/AllCards";
-import { ICategory } from "@/app/types/All.type";
+import { ICategory } from "@/types/All.type";
 import { getAllCategories } from "@/lib/api";
 
 export default async function AllCategories() {

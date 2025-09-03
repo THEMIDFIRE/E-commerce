@@ -1,10 +1,14 @@
 "use client"
-import { IBrand, ICategory, IProduct } from "@/app/types/All.type";
+import { IBrand, ICategory, IProduct } from "@/types/All.type";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { HeartIcon, ShoppingCart, Slash, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { addToCart } from "@/lib/api";
+import { useCart } from "@/context/CartContext";
+import { toast } from "sonner";
+import { getUserToken } from "@/lib/server-utils";
 
 export function BrandCard({ brand }: { brand: IBrand }) {
     return (
@@ -36,43 +40,53 @@ export function CatCard({ category }: { category: ICategory }) {
 }
 
 export function ProdCard({ product }: { product: IProduct }) {
+    const { getCartData } = useCart();
+    
+    const handleAddToCart = async () => {
+        const token = await getUserToken()
+        if (token) {
+            toast.promise(addToCart(product._id), {
+                loading: 'Adding to cart...',
+                success: 'Added to cart',
+                error: 'Failed to add'
+            })
+            getCartData();
+        }
+    }
 
     return (
-        <Link href={`/products/${product._id}`}>
-            <Card className="py-4 hover:shadow-lg transition-shadow duration-300">
-                <div className="min-h-52 bg-gray-100 rounded-2xl relative mx-4 shadow-sm">
-                    {product.imageCover ? (
-                        <Image
-                            src={product.imageCover}
-                            alt={product.title}
-                            fill
-                            className="object-contain w-full"
-                        />
+        <Card className="py-4 hover:shadow-lg transition-shadow duration-300">
+            <div className="min-h-52 bg-gray-100 rounded-2xl relative mx-4 shadow-sm">
+                {product.imageCover ? (
+                    <Image
+                        src={product.imageCover}
+                        alt={product.title}
+                        fill
+                        className="object-contain w-full"
+                    />
+                ) : (
+                    <div className="h-full bg-gray-300 flex items-center justify-center text-gray-500">
+                        No Image
+                    </div>
+                )}
+                <div className="absolute top-2.5 left-2.5 flex gap-2 items-center">
+                    {product.quantity > 0 ? (
+                        <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
+                            In Stock ({product.quantity})
+                        </span>
                     ) : (
-                        <div className="h-full bg-gray-300 flex items-center justify-center text-gray-500">
-                            No Image
-                        </div>
+                        <span className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded">
+                            Out of Stock
+                        </span>
                     )}
-                    <div className="absolute top-2.5 left-2.5 flex gap-2 items-center">
-                        {product.quantity > 0 ? (
-                            <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
-                                In Stock ({product.quantity})
-                            </span>
-                        ) : (
-                            <span className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded">
-                                Out of Stock
-                            </span>
-                        )}
-                    </div>
-                    <div className="absolute bottom-2.5 right-2.5 flex gap-2.5">
-                        <button aria-label="Add to cart">
-                            <ShoppingCart size={20} className="hover:fill-accent-foreground" />
-                        </button>
-                        <button aria-label="Add to wishlist">
-                            <HeartIcon size={20} className="hover:fill-red-500 hover:stroke-red-500" />
-                        </button>
-                    </div>
                 </div>
+                <div className="absolute bottom-2.5 right-2.5 flex gap-2.5">
+                    <ShoppingCart size={20} className="hover:fill-accent-foreground hover:cursor-pointer" onClick={handleAddToCart} />
+                    <HeartIcon size={20} className="hover:fill-red-500 hover:stroke-red-500 hover:cursor-pointer" />
+                </div>
+            </div>
+            <Link href={`/products/${product._id}`}>
+
                 <CardHeader>
                     <CardTitle className="text-xl line-clamp-1">
                         {product.title}
@@ -106,8 +120,8 @@ export function ProdCard({ product }: { product: IProduct }) {
                         </span>
                     </div>
                 </CardFooter>
-            </Card>
-        </Link>
+            </Link >
+        </Card>
     )
 }
 
@@ -138,7 +152,7 @@ export function LoadingCard() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {Array(3).fill(null).map((_, index) => <Skeleton className="w-1/2 h-5" />)}
+                    {Array(3).fill(null).map((_, index) => <Skeleton key={index} className="w-1/2 h-5" />)}
                 </CardContent>
                 <CardFooter className="flex justify-between items-center">
                     <Skeleton className="w-1/2 h-5" />

@@ -1,5 +1,5 @@
 import { BrandCard } from '@/app/_components/shared/AllCards'
-import { IBrand } from '@/app/types/All.type';
+import { IBrand } from '@/types/All.type';
 import { getAllBrands } from '@/lib/api'
 
 export default async function AllBrands() {

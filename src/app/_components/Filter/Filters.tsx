@@ -1,4 +1,4 @@
-import { IBrand, ICategory } from "@/app/types/All.type";
+import { IBrand, ICategory } from "@/types/All.type";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";

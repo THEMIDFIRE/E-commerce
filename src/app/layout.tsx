@@ -4,7 +4,7 @@ import { Oxygen } from "next/font/google";
 import Footer from "./_components/layout/Footer";
 import Navbar from "./_components/layout/Navbar";
 import "./globals.css";
-import Providers from "./Providers";
+import Providers from "../lib/Providers";
 import { getAllBrands, getAllCategories } from "@/lib/api";
 
 const oxygen = Oxygen({

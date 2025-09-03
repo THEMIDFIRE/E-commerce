@@ -1,5 +1,5 @@
 import { MobileFilters, SideFilters } from '@/app/_components/Filter/Filters';
-import { IProduct } from '@/app/types/All.type';
+import { IProduct } from '@/types/All.type';
 import { Input } from '@/components/ui/input';
 import { getAllBrands, getAllCategories, getAllProducts } from '@/lib/api';
 import { Suspense } from 'react';

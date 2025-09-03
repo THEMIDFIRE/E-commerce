@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { IProduct } from "@/app/types/All.type";
+import { IProduct } from "@/types/All.type";
 import { ProdCard } from "../shared/AllCards";
 
 

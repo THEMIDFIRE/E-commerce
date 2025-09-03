@@ -4,7 +4,6 @@ import FAQ from "./_components/FAQ/FAQ";
 import Featured from "./_components/Featured/Featured";
 import Hero from "./_components/Hero/Hero";
 import Popular from "./_components/Popular/Popular";
-import { IProduct } from "./types/All.type";
 
 export default async function Home() {
   const products = await getAllProducts()
