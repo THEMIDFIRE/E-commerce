@@ -4,7 +4,7 @@ import { OrderCard } from "@/app/_components/shared/AllCards";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getUserOrders } from "@/lib/api";
 import { getUserToken } from "@/lib/server-utils";
-import { IOrder, IOrderResponse } from "@/types/All.type";
+import { IOrder } from "@/types/All.type";
 import { useEffect, useState } from "react";
 
 interface User {
