@@ -98,16 +98,44 @@ export async function addToCart(productId: string) {
     return data;
 }
 
-export async function updateCartQuantity(id: string, quantity: number) {
+// export async function updateCartQuantity(id: string, quantity: number) {
+//     const token = await getUserToken()
+//     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/cart/${id}`, {
+//         method: "PUT",
+//         headers: { token },
+//         body: JSON.stringify({ quantity })
+//     });
+//     if (!res.ok) {
+//         throw new Error(`Error: ${res.statusText}`);
+//     }
+//     const { data } = await res.json();
+//     return data;
+// }
+
+export async function checkoutCOD(cartId: string, formData: any) {
     const token = await getUserToken()
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/cart/${id}`, {
-        method: "PUT",
-        headers: { token },
-        body: JSON.stringify({ quantity })
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/${cartId}`, {
+        method: "POST",
+        cache: "no-store",
+        headers: { token, "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
     });
     if (!res.ok) {
         throw new Error(`Error: ${res.statusText}`);
     }
-    const { data } = await res.json();
+    const result = await res.json();
+    return result;
+}
+
+export async function getUserOrders(userId: string) {
+    const token = await getUserToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/users/${userId}`, {
+        cache: "no-store",
+        headers: { token }
+    });
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+    }
+    const data = await res.json();
     return data;
 }
