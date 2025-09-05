@@ -15,7 +15,7 @@ import { useState } from "react"
 import { PulseLoader } from "react-spinners"
 
 const formSchema = z.object({
-    email: z.string().email("Please enter a valid email"),
+    email: z.email("Please enter a valid email"),
     password: z.string().min(8, "Password must be at least 8 characters")
 })
 type LoginForm = z.infer<typeof formSchema>
@@ -48,7 +48,6 @@ export default function Login() {
                 toast.success('Login successful')
                 router.replace('/')
             }
-            console.log('res', res)
         } catch (error) {
             toast.error("Something went wrong")
         } finally {

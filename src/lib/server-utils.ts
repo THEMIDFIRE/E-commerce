@@ -2,11 +2,15 @@
 import { decode } from "next-auth/jwt"
 import { cookies } from "next/headers"
 
-export const getUserToken = async () => {
+export const getUserToken = async (returnDecoded = false) => {
     const userToken = (await cookies()).get('next-auth.session-token')?.value
-    const token = await decode({
+    if (!userToken) return null
+    
+    const decoded = await decode({
         token: userToken,
         secret: process.env.AUTH_SECRET!
     })
-    return token?.token as string
+    
+    // Return decoded token object if requested, otherwise return the inner token string
+    return returnDecoded ? decoded : (decoded?.token as string)
 }

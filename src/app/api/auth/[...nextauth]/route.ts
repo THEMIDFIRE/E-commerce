@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { decode } from "next-auth/jwt";
 
 
 const handler = NextAuth({
@@ -22,8 +23,25 @@ const handler = NextAuth({
                     },
                 })
                 const data = await res.json()
-                if (res.ok) {
-                    return { id: data.user.id, user: data.user, token: data.token }
+                if (res.ok) {                    
+                    let userId = null
+                    try {
+                        const decodedToken = await decode({
+                            token: data.token,
+                            secret: process.env.AUTH_SECRET!
+                        })
+                        userId = decodedToken?.id
+                    } catch (error) {
+                        console.log('Error decoding token:', error)
+                        try {
+                            const payload = JSON.parse(atob(data.token.split('.')[1]))
+                            userId = payload.id
+                        } catch (manualError) {
+                            console.log('Manual extraction also failed:', manualError)
+                        }
+                    }
+                    
+                    return { id: userId, user: data.user, token: data.token }
                 } else {
                     throw Error(data.message || 'Failed to login')
                 }
@@ -35,13 +53,18 @@ const handler = NextAuth({
             if (user) {
                 token.user = user.user
                 token.token = user.token
+                token.id = user.id
             }
             return token
         },
         async session({ session, token }) {
-            session.user = token.user as {
+            session.user = {
+                ...(token.user as any),
+                id: token.id
+            } as {
                 id: string;
                 name: string;
+                email: string;
                 role: string;
             }
             session.token = token.token

@@ -1,5 +1,4 @@
 "use client";
-import CartItems from '@/app/_components/CartItems/CartItems';
 import { ProductElement } from '@/types/All.type';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -7,11 +6,17 @@ import { useCart } from '@/context/CartContext';
 import { Skeleton } from '@/components/ui/skeleton';
 import { rmvCartItem } from '@/lib/api';
 import { toast } from 'sonner';
+import Link from 'next/link';
+import CartItems from '@/app/_components/CartCards/CartItems';
+import CartSkeleton from '@/app/_components/CartCards/CartSkeleton';
+import OrderSummarySkeleton from '@/app/_components/CartCards/OrderSummarySkeleton';
+import OrderSummary from '@/app/_components/CartCards/OrderSummary';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 
 export default function Cart() {
     const { cart, getCartData } = useCart()
     const cartProducts = cart?.data?.products;
-    const totalCartPrice = cart?.data?.totalCartPrice;
     const cartTotal = cart?.numOfCartItems;
 
     if (cart?.error) {
@@ -38,8 +43,6 @@ export default function Cart() {
         <section className='pt-4 pb-16'>
             <div className="container max-w-4/5 mx-auto">
                 <h3 className="text-2xl font-bold mb-6">Your Cart</h3>
-
-
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className="grow border rounded-[10px] overflow-hidden">
                         <Table>
@@ -54,23 +57,7 @@ export default function Cart() {
                             </TableHeader>
                             <TableBody>
                                 {!cartProducts ?
-                                    <TableRow>
-                                        <TableCell>
-                                            <Skeleton className='w-2/3 h-5 bg-gray-300' />
-                                        </TableCell>
-                                        <TableCell>
-                                            <Skeleton className='w-2/3 h-5 bg-gray-300' />
-                                        </TableCell>
-                                        <TableCell>
-                                            <Skeleton className='w-2/3 h-5 bg-gray-300' />
-                                        </TableCell>
-                                        <TableCell>
-                                            <Skeleton className='w-2/3 h-5 bg-gray-300' />
-                                        </TableCell>
-                                        <TableCell>
-                                            <Skeleton className='w-2/3 h-5 bg-gray-300' />
-                                        </TableCell>
-                                    </TableRow>
+                                    <CartSkeleton />
                                     : cartTotal === 0 ? (
                                         <TableRow>
                                             <TableCell colSpan={5} className='text-center py-5'>
@@ -96,65 +83,30 @@ export default function Cart() {
                             </TableHeader>
                             <TableBody>
                                 {!cartProducts ? (
-                                    <>
-                                        <TableRow>
-                                            <TableCell>
-                                                Sub total
-                                            </TableCell>
-                                            <TableCell className='flex items-center gap-2'>
-                                                <Skeleton className='w-1/4 h-5 bg-gray-300' /> EGP
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow className='hover:bg-gray-100'>
-                                            <TableCell>
-                                                Discount
-                                            </TableCell>
-                                            <TableCell className='flex items-center gap-2'>
-                                                <Skeleton className='w-1/4 h-5 bg-gray-300' />
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow className='hover:bg-gray-100'>
-                                            <TableCell>
-                                                Total
-                                            </TableCell>
-                                            <TableCell className='flex items-center gap-2'>
-                                                <Skeleton className='w-1/4 h-5 bg-gray-300' /> EGP
-                                            </TableCell>
-                                        </TableRow>
-                                    </>
+                                    <OrderSummarySkeleton />
                                 ) : (
-                                    <>
-                                        <TableRow className='hover:bg-gray-100'>
-                                            <TableCell>
-                                                Sub total
-                                            </TableCell>
-                                            <TableCell>
-                                                {totalCartPrice} EGP
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow className='hover:bg-gray-100'>
-                                            <TableCell>
-                                                Discount
-                                            </TableCell>
-                                            <TableCell>
-                                                ---
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow className='hover:bg-gray-100'>
-                                            <TableCell>
-                                                Total
-                                            </TableCell>
-                                            <TableCell>
-                                                {totalCartPrice} EGP
-                                            </TableCell>
-                                        </TableRow>
-                                    </>
+                                    <OrderSummary />
                                 )}
                             </TableBody>
                             <TableFooter>
+                                <span className='mt-4'>Select Payment Method</span>
+                                <RadioGroup defaultValue="cod" className='flex justify-between my-4'>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="cod" id="cod" />
+                                        <Label htmlFor="cod">Cash on Delivery</Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="card" id="card" />
+                                        <Label htmlFor="card">Card Payment</Label>
+                                    </div>
+                                </RadioGroup>
                                 <TableRow>
                                     <TableCell colSpan={2} className='p-0'>
-                                        <Button className='w-full rounded-none rounded-b-md'>Checkout</Button>
+                                        <Link href="/checkout">
+                                            <Button className='w-full rounded-none rounded-b-md'>
+                                                Proceed to Checkout
+                                            </Button>
+                                        </Link>
                                     </TableCell>
                                 </TableRow>
                             </TableFooter>

@@ -1,14 +1,15 @@
 "use client"
-import { IBrand, ICategory, IProduct } from "@/types/All.type";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { TableCell, TableRow } from "@/components/ui/table";
+import { useCart } from "@/context/CartContext";
+import { addToCart } from "@/lib/api";
+import { getUserToken } from "@/lib/server-utils";
+import { IBrand, ICategory, IOrder, IProduct } from "@/types/All.type";
 import { HeartIcon, ShoppingCart, Slash, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { addToCart } from "@/lib/api";
-import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
-import { getUserToken } from "@/lib/server-utils";
 
 export function BrandCard({ brand }: { brand: IBrand }) {
     return (
@@ -41,7 +42,7 @@ export function CatCard({ category }: { category: ICategory }) {
 
 export function ProdCard({ product }: { product: IProduct }) {
     const { getCartData } = useCart();
-    
+
     const handleAddToCart = async () => {
         const token = await getUserToken()
         if (token) {
@@ -167,5 +168,55 @@ export function LoadingCard() {
                 </CardFooter>
             </Card>
         </>
+    )
+}
+
+export function OrderCard({ order }: { order: IOrder }) {
+    const formatDate = (dateString: string) => {
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    };
+
+    const getDeliveryStatus = (isDelivered: boolean) => {
+        return isDelivered ? 'Delivered' : 'Processing';
+    };
+
+    const getPaymentStatus = (isPaid: boolean) => {
+        return isPaid ? 'Paid' : 'Pending';
+    };
+
+    return (
+        <TableRow className="hover:bg-gray-100 text-center">
+            <TableCell className="font-medium">#{order.id}</TableCell>
+            <TableCell>{formatDate(order.createdAt)}</TableCell>
+            <TableCell>
+                <span className={`px-2 py-1 rounded-full text-xs ${order.isDelivered
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                    {getDeliveryStatus(order.isDelivered)}
+                </span>
+            </TableCell>
+            <TableCell>
+                <span className={`px-2 py-1 rounded-full text-xs ${order.isPaid
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                    {getPaymentStatus(order.isPaid)}
+                </span>
+            </TableCell>
+            <TableCell className="font-semibold">{order.totalOrderPrice} EGP</TableCell>
+            <TableCell>
+                <Link
+                    href={`/orders/${order._id}`}
+                    className="text-blue-600 hover:text-blue-800 underline"
+                >
+                    View Details
+                </Link>
+            </TableCell>
+        </TableRow>
     )
 }

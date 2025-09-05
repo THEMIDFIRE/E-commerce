@@ -112,3 +112,59 @@ export enum Slug {
     WomenSClothing = "women's-clothing",
     WomenSFashion = "women's-fashion",
 }
+
+export interface IOrder {
+    _id: string;
+    user: {
+        _id: string;
+        name: string;
+        email: string;
+        phone: string;
+    };
+    shippingAddress: {
+        details: string;
+        phone: string;
+        city: string;
+    };
+    taxPrice: number;
+    shippingPrice: number;
+    totalOrderPrice: number; // Change from string to number
+    paymentMethodType: string;
+    isPaid: boolean;
+    isDelivered: boolean;
+    cartItems: {
+        count: number;
+        _id: string;
+        product: {
+            _id: string;
+            title: string;
+            imageCover: string;
+            category: {
+                _id: string;
+                name: string;
+                slug: string;
+                image: string;
+            };
+            brand: {
+                _id: string;
+                name: string;
+                slug: string;
+                image: string;
+            };
+            ratingsAverage: number;
+            ratingsQuantity: number;
+            subcategory: Array<{
+                _id: string;
+                name: string;
+                slug: string;
+                category: string;
+            }>;
+            id: string;
+        };
+        price: number;
+    }[];
+    createdAt: string; // Change from Date to string
+    updatedAt: string; // Change from Date to string
+    id: number;
+    __v: number;
+}
