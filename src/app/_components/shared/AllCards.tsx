@@ -40,6 +40,25 @@ export function CatCard({ category }: { category: ICategory }) {
     )
 }
 
+export function SubCatCard({ subcategory, categoryId }: { subcategory: IBrand, categoryId: string }) {
+    return (
+        <>
+            <Link href={`/categories/${categoryId}/${subcategory._id}`}>
+                <Card className="p-5 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div className="img h-52 w-full px-5 bg-accent rounded-xl">
+                        {subcategory.image ? (
+                            <img src={subcategory.image} alt={subcategory.name} className="w-full h-full object-contain" />
+                        ) : (
+                            <div className="h-full flex justify-center items-center">No Image</div>
+                        )}
+                    </div>
+                    <CardTitle className="text-center">{subcategory.name}</CardTitle>
+                </Card>
+            </Link>
+        </>
+    )
+}
+
 export function ProdCard({ product }: { product: IProduct }) {
     const { getCartData } = useCart();
     const { getWishlistData, wishlist } = useWishlist()
@@ -240,7 +259,7 @@ export function OrderCard({ order }: { order: IOrder }) {
             <TableCell className="font-semibold">{order.totalOrderPrice} EGP</TableCell>
             <TableCell>
                 <Link
-                    href={`/orders/${order._id}`}
+                    href={`allorders/${order._id}`}
                     className="text-blue-600 hover:text-blue-800 underline"
                 >
                     View Order Details

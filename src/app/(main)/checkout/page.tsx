@@ -34,7 +34,7 @@ export default function Checkout() {
         const formData = {"shippingAddress": data}
         checkoutCOD(cartId, formData)
         toast.success("Order placed successfully")
-        redirect('/orders')
+        redirect('/allorders')
     }
     return (
         <section>

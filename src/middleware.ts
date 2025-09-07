@@ -20,7 +20,7 @@ export const config = {
     matcher: [
         // Protected routes
         '/account',
-        '/orders',
+        '/allorders',
         '/wishlist',
         '/cart',
         '/checkout',

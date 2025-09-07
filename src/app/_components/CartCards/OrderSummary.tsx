@@ -32,5 +32,6 @@ export default function OrderSummary() {
                     {totalCartPrice} EGP
                 </TableCell>
             </TableRow>
-        </>)
+        </>
+    )
 }

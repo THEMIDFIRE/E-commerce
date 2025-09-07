@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useCart } from '@/context/UserContext';
 import { Skeleton } from '@/components/ui/skeleton';
-import { rmvCartItem } from '@/lib/api';
+import { rmvCartItem, createCardCheckoutSession } from '@/lib/api';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import CartItems from '@/app/_components/CartCards/CartItems';
@@ -12,12 +12,18 @@ import CartSkeleton from '@/app/_components/CartCards/CartSkeleton';
 import OrderSummarySkeleton from '@/app/_components/CartCards/OrderSummarySkeleton';
 import OrderSummary from '@/app/_components/CartCards/OrderSummary';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
+import { z } from 'zod'
+import { useForm } from 'react-hook-form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+
 
 export default function Cart() {
     const { cart, getCartData } = useCart()
     const cartProducts = cart?.data?.products;
     const cartTotal = cart?.numOfCartItems;
+    const router = useRouter()
 
     if (cart?.error) {
         return (
@@ -38,6 +44,42 @@ export default function Cart() {
         });
         getCartData()
     };
+
+    const formSchema = z.object({
+        type: z.enum(['COD', 'card'])
+    })
+    type OrderData = z.infer<typeof formSchema>
+
+    const form = useForm<OrderData>({
+        resolver: zodResolver(formSchema),
+        defaultValues: { type: 'COD' }
+    })
+
+    const onSubmit = async (data: OrderData) => {
+        if (data.type === 'COD') {
+            router.push('/checkout')
+        } else {
+            try {
+                const cartId = cart?.cartId as string
+                if (!cartId) {
+                    toast.error('Missing cart. Please refresh.')
+                    return
+                }
+                const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'
+                const res = await createCardCheckoutSession(cartId, origin)
+                const url = res?.session?.url || res?.url
+                if (url) {
+                    window.location.href = url
+                } else {
+                    toast.error('Failed to start payment session')
+                }
+            } catch (err) {
+                toast.error('Unable to create checkout session')
+            }
+        }
+    }
+
+
 
     return (
         <section className='pt-4 pb-16'>
@@ -90,30 +132,52 @@ export default function Cart() {
                             </TableBody>
                             <TableFooter>
                                 <TableRow>
-                                    <TableCell>Select Payment Method:</TableCell>
-                                </TableRow>
-                                <TableRow>
                                     <TableCell>
-                                        <RadioGroup defaultValue="cod" className='flex justify-between my-4'>
-                                            <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="cod" id="cod" />
-                                                <Label htmlFor="cod">Cash on Delivery</Label>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="card" id="card" />
-                                                <Label htmlFor="card">Card Payment</Label>
-                                            </div>
-                                        </RadioGroup>
+                                        <Form {...form}>
+                                            <form id="paymentForm" onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+                                                <FormField
+                                                    control={form.control}
+                                                    name="type"
+                                                    render={({ field }) => (
+                                                        <FormItem className="space-y-3">
+                                                            <FormLabel>Select Payment method</FormLabel>
+                                                            <FormControl>
+                                                                <RadioGroup
+                                                                    onValueChange={field.onChange}
+                                                                    defaultValue={field.value}
+                                                                    className="flex items-center justify-evenly"
+                                                                >
+                                                                    <FormItem className="flex items-center gap-3">
+                                                                        <FormControl>
+                                                                            <RadioGroupItem value="COD" />
+                                                                        </FormControl>
+                                                                        <FormLabel className="font-normal">
+                                                                            Cash on Delivery
+                                                                        </FormLabel>
+                                                                    </FormItem>
+
+                                                                    <FormItem className="flex items-center gap-3">
+                                                                        <FormControl>
+                                                                            <RadioGroupItem value="card" />
+                                                                        </FormControl>
+                                                                        <FormLabel className="font-normal">Card Payment</FormLabel>
+                                                                    </FormItem>
+                                                                </RadioGroup>
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            </form>
+                                        </Form>
                                     </TableCell>
                                 </TableRow>
 
                                 <TableRow>
                                     <TableCell colSpan={2} className='p-0'>
-                                        <Link href="/checkout">
-                                            <Button className='w-full rounded-none rounded-b-md'>
+                                            <Button form="paymentForm" type='submit' className='w-full rounded-none rounded-b-md'>
                                                 Proceed to Checkout
                                             </Button>
-                                        </Link>
                                     </TableCell>
                                 </TableRow>
                             </TableFooter>

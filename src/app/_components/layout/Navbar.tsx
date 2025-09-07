@@ -140,7 +140,7 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                                                 {status === "authenticated" ? (
                                                     <>
                                                         <Link href="/account">My Account</Link>
-                                                        <Link href="/orders">My Orders</Link>
+                                                        <Link href="/allorders">My Orders</Link>
                                                         <Link href="/wishlist">My Wishlist</Link>
                                                         <Link href="/cart">My Cart</Link>
                                                         <Button
@@ -198,13 +198,8 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                                                     </NavigationMenuLink>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem asChild>
-                                                    <NavigationMenuLink href="/orders" className="flex-row items-center gap-2">
+                                                    <NavigationMenuLink href="/allorders" className="flex-row items-center gap-2">
                                                         <ShoppingBag /> My Orders
-                                                    </NavigationMenuLink>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem asChild>
-                                                    <NavigationMenuLink href="/wishlist" className="flex-row items-center gap-2">
-                                                        <Heart /> My Wishlist
                                                     </NavigationMenuLink>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem asChild>
