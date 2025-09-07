@@ -223,3 +223,16 @@ export async function createCardCheckoutSession(cartId: string, returnUrl: strin
     const data = await res.json();
     return data;
 }
+
+export async function forgetPassword(email: string) {
+    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/auth/forgotPasswords`, {
+        method: 'POST',
+        cache: 'no-store',
+        body: JSON.stringify(email)
+    })
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`)
+    }
+    const data = await res.json()
+    return data
+}

@@ -27,5 +27,6 @@ export const config = {
         // Auth routes
         '/login',
         '/register',
+        '/forget_password'
     ],
 }
