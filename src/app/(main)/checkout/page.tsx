@@ -9,7 +9,7 @@ import { useState } from "react";
 import { PulseLoader } from "react-spinners";
 import { z } from "zod";
 import { checkoutCOD } from "@/lib/api";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "@/context/UserContext";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 

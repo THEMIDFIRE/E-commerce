@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from "@/components/ui/table";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "@/context/UserContext";
 
 export default function OrderSummary() {
     const { cart } = useCart()

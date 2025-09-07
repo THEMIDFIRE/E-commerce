@@ -2,8 +2,8 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { useCart } from "@/context/CartContext";
-import { addToCart } from "@/lib/api";
+import { useCart, useWishlist } from "@/context/UserContext";
+import { addToCart, addToWishlist, rmvFromWishlist } from "@/lib/api";
 import { getUserToken } from "@/lib/server-utils";
 import { IBrand, ICategory, IOrder, IProduct } from "@/types/All.type";
 import { HeartIcon, ShoppingCart, Slash, StarIcon } from "lucide-react";
@@ -42,6 +42,9 @@ export function CatCard({ category }: { category: ICategory }) {
 
 export function ProdCard({ product }: { product: IProduct }) {
     const { getCartData } = useCart();
+    const { getWishlistData, wishlist } = useWishlist()
+    
+    const isInWishlist = wishlist?.data?.some((item: any) => item._id === product._id)
 
     const handleAddToCart = async () => {
         const token = await getUserToken()
@@ -52,6 +55,25 @@ export function ProdCard({ product }: { product: IProduct }) {
                 error: 'Failed to add'
             })
             getCartData();
+        }
+    }
+    const handleWishlistToggle = async () => {
+        const token = await getUserToken()
+        if (token) {
+            if (isInWishlist) {
+                toast.promise(rmvFromWishlist(product._id), {
+                    loading: 'Removing from Wishlist...',
+                    success: 'Removed from Wishlist',
+                    error: 'Failed to remove'
+                })
+            } else {
+                toast.promise(addToWishlist(product._id), {
+                    loading: 'Adding to Wishlist...',
+                    success: 'Added to Wishlist',
+                    error: 'Failed to add'
+                })
+            }
+            getWishlistData();
         }
     }
 
@@ -83,11 +105,18 @@ export function ProdCard({ product }: { product: IProduct }) {
                 </div>
                 <div className="absolute bottom-2.5 right-2.5 flex gap-2.5">
                     <ShoppingCart size={20} className="hover:fill-accent-foreground hover:cursor-pointer" onClick={handleAddToCart} />
-                    <HeartIcon size={20} className="hover:fill-red-500 hover:stroke-red-500 hover:cursor-pointer" />
+                    <HeartIcon 
+                        size={20} 
+                        className={`hover:cursor-pointer ${
+                            isInWishlist 
+                                ? "fill-red-500 stroke-red-500" 
+                                : "hover:fill-red-500 hover:stroke-red-500"
+                        }`} 
+                        onClick={handleWishlistToggle} 
+                    />
                 </div>
             </div>
             <Link href={`/products/${product._id}`}>
-
                 <CardHeader>
                     <CardTitle className="text-xl line-clamp-1">
                         {product.title}
@@ -194,16 +223,16 @@ export function OrderCard({ order }: { order: IOrder }) {
             <TableCell>{formatDate(order.createdAt)}</TableCell>
             <TableCell>
                 <span className={`px-2 py-1 rounded-full text-xs ${order.isDelivered
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-yellow-100 text-yellow-800'
                     }`}>
                     {getDeliveryStatus(order.isDelivered)}
                 </span>
             </TableCell>
             <TableCell>
                 <span className={`px-2 py-1 rounded-full text-xs ${order.isPaid
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800'
                     }`}>
                     {getPaymentStatus(order.isPaid)}
                 </span>
@@ -214,8 +243,32 @@ export function OrderCard({ order }: { order: IOrder }) {
                     href={`/orders/${order._id}`}
                     className="text-blue-600 hover:text-blue-800 underline"
                 >
-                    View Details
+                    View Order Details
                 </Link>
+            </TableCell>
+        </TableRow>
+    )
+}
+export function OrderCardSkeleton() {
+
+    return (
+        <TableRow className="hover:bg-gray-100">
+            <TableCell>
+                <Skeleton className="h-3 w-1/2 bg-gray-300" />
+            </TableCell>
+            <TableCell>
+                <Skeleton className="h-3 w-1/2 bg-gray-300" />
+            </TableCell>
+            <TableCell>
+                <Skeleton className="h-3 w-1/2 bg-gray-300" />
+            </TableCell>
+            <TableCell>
+                <Skeleton className="h-3 w-1/2 bg-gray-300" />
+            </TableCell>
+            <TableCell className="flex gap-2 items-center">
+                <Skeleton className="h-3 w-1/2 bg-gray-300" />EGP</TableCell>
+            <TableCell>
+                <Skeleton className="h-3 w-1/2 bg-gray-300" />
             </TableCell>
         </TableRow>
     )

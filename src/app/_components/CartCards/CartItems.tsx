@@ -1,8 +1,8 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
-import { useCart } from "@/context/CartContext";
-import { rmvCartItem } from "@/lib/api";
+import { useCart } from "@/context/UserContext";
+import { rmvCartItem, updateCartQuantity } from "@/lib/api";
 import { ProductElement } from "@/types/All.type";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -11,10 +11,21 @@ import Counter from "../shared/Counter";
 
 export default function CartItems(item: ProductElement) {
     const { getCartData } = useCart();
+    
     const handleRemove = async () => {
         const data = await rmvCartItem(item?.product?._id);
         getCartData()
         toast.success(data.status);
+    };
+
+    const handleQuantityChange = async (newQuantity: number) => {
+        try {
+            await updateCartQuantity(item.product._id, newQuantity);
+            getCartData();
+            toast.success('Quantity updated');
+        } catch (error) {
+            toast.error('Failed to update quantity');
+        }
     };
     return (
         <>
@@ -45,6 +56,7 @@ export default function CartItems(item: ProductElement) {
                         <Counter
                             className='border-2 rounded-full w-fit'
                             initialValue={item.count}
+                            onQuantityChange={handleQuantityChange}
                         />
                     </div>
                 </TableCell>

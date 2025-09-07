@@ -1,6 +1,6 @@
 "use client"
 
-import { OrderCard } from "@/app/_components/shared/AllCards";
+import { OrderCard, OrderCardSkeleton } from "@/app/_components/shared/AllCards";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getUserOrders } from "@/lib/api";
 import { getUserToken } from "@/lib/server-utils";
@@ -76,7 +76,11 @@ export default function Orders() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {orders.map((order) => (
+                            {loading ? 
+                            Array.from({ length: 3 }).map((_, idx) => (
+                                <OrderCardSkeleton key={idx} />
+                            )) :
+                            orders.map((order) => (
                                 <OrderCard key={order._id} order={order} />
                             ))}
                         </TableBody>

@@ -1,5 +1,6 @@
 import { getUserToken } from "./server-utils";
 
+// Get All Products
 export async function getAllProducts() {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products`, {
         cache: "force-cache"
@@ -10,6 +11,7 @@ export async function getAllProducts() {
     const { data } = await res.json();
     return data;
 }
+// Get specific product details
 export async function getSpecificProduct(id: string) {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products/${id}`);
     if (!res.ok) {
@@ -18,7 +20,7 @@ export async function getSpecificProduct(id: string) {
     const { data } = await res.json();
     return data;
 }
-
+// Get all categories
 export async function getAllCategories() {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/categories`, {
         cache: "force-cache"
@@ -29,7 +31,7 @@ export async function getAllCategories() {
     const { data } = await res.json();
     return data;
 }
-
+// Get specific category
 export async function getSpecificCategory(id: string) {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/categories/${id}`);
     if (!res.ok) {
@@ -38,6 +40,7 @@ export async function getSpecificCategory(id: string) {
     const { data } = await res.json();
     return data;
 }
+// Get all brands
 export async function getAllBrands() {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/brands`, {
         cache: "force-cache"
@@ -48,7 +51,7 @@ export async function getAllBrands() {
     const { data } = await res.json();
     return data;
 }
-
+// Get specific brand
 export async function getSpecificBrand(id: string) {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/brands/${id}`);
     if (!res.ok) {
@@ -57,7 +60,7 @@ export async function getSpecificBrand(id: string) {
     const { data } = await res.json();
     return data;
 }
-
+// Get user cart
 export async function getUserCart() {
     const token = await getUserToken()
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cart`, {
@@ -70,6 +73,40 @@ export async function getUserCart() {
     const data = await res.json();
     return data;
 }
+// Add product to Cart
+export async function addToCart(productId: string) {
+    const token = await getUserToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cart`, {
+        method: "POST",
+        cache: "no-store",
+        headers: { token: token as string, "Content-Type": "application/json" },
+        body: JSON.stringify({ productId })
+    });
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data;
+}
+// Update product quantity
+export async function updateCartQuantity(productId: string, count: number) {
+    const token = await getUserToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cart/${productId}`, {
+        method: "PUT",
+        cache: "no-store",
+        headers: { 
+            token: token as string,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ count: count.toString() })
+    });
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data;
+}
+// Remove product from Cart
 export async function rmvCartItem(id?: string) {
     const token = await getUserToken()
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cart/${id ? id : ""}`, {
@@ -83,13 +120,12 @@ export async function rmvCartItem(id?: string) {
     const data = await res.json();
     return data;
 }
-export async function addToCart(productId: string) {
+// Get user Wishlist
+export async function getUserWishlist() {
     const token = await getUserToken()
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cart`, {
-        method: "POST",
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/wishlist`, {
         cache: "no-store",
-        headers: { token: token as string, "Content-Type": "application/json" },
-        body: JSON.stringify({ productId})
+        headers: { token: token as string }
     });
     if (!res.ok) {
         throw new Error(`Error: ${res.statusText}`);
@@ -97,21 +133,36 @@ export async function addToCart(productId: string) {
     const data = await res.json();
     return data;
 }
-
-// export async function updateCartQuantity(id: string, quantity: number) {
-//     const token = await getUserToken()
-//     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/cart/${id}`, {
-//         method: "PUT",
-//         headers: { token: token as string },
-//         body: JSON.stringify({ quantity })
-//     });
-//     if (!res.ok) {
-//         throw new Error(`Error: ${res.statusText}`);
-//     }
-//     const { data } = await res.json();
-//     return data;
-// }
-
+// Add product to Wishlist
+export async function addToWishlist(productId: string) {
+    const token = await getUserToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/wishlist`, {
+        method: "POST",
+        cache: "no-store",
+        headers: { token: token as string, "Content-Type": "application/json" },
+        body: JSON.stringify({ productId })
+    });
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data;
+}
+// Remove product from Wishlist
+export async function rmvFromWishlist(productId: string) {
+    const token = await getUserToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/wishlist/${productId}`, {
+        method: "DELETE",
+        cache: "no-store",
+        headers: { token: token as string }
+    });
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data;
+}
+// Checkout using Cash on Delivery payment method
 export async function checkoutCOD(cartId: string, formData: any) {
     const token = await getUserToken()
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/${cartId}`, {
@@ -126,7 +177,7 @@ export async function checkoutCOD(cartId: string, formData: any) {
     const result = await res.json();
     return result;
 }
-
+// Get user's order history
 export async function getUserOrders(userId: string) {
     const token = await getUserToken()
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/user/${userId}`, {

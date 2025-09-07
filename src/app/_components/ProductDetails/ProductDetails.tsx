@@ -11,14 +11,15 @@ import { HeartIcon, PackageIcon, SlashIcon, StarIcon, TruckIcon } from 'lucide-r
 import { useEffect, useState } from 'react';
 import Counter from '../shared/Counter';
 import { getUserToken } from '@/lib/server-utils';
-import { addToCart } from '@/lib/api';
+import { addToCart, updateCartQuantity } from '@/lib/api';
 import { toast } from 'sonner';
-import { useCart } from '@/context/CartContext';
+import { useCart } from '@/context/UserContext';
 
 export default function ProductDetails({ product }: { product: ICustomProduct }) {
     const [api, setApi] = useState<CarouselApi>()
     const [current, setCurrent] = useState(0)
     const [count, setCount] = useState(0)
+    const [quantity, setQuantity] = useState(1)
 
     useEffect(() => {
         if (!api) {
@@ -33,15 +34,27 @@ export default function ProductDetails({ product }: { product: ICustomProduct })
 
     const { getCartData } = useCart();
 
+    const handleQuantityChange = (newQuantity: number) => {
+        setQuantity(newQuantity);
+    };
+
     const handleAddToCart = async () => {
         const token = await getUserToken()
         if (token) {
-            toast.promise(addToCart(product._id), {
-                loading: 'Adding to cart...',
-                success: 'Added to cart',
-                error: 'Failed to add'
-            })
-            getCartData();
+            try {
+                // First add one item to cart
+                await addToCart(product._id);
+                
+                // Then update quantity to desired amount
+                if (quantity > 1) {
+                    await updateCartQuantity(product._id, quantity);
+                }
+                
+                toast.success(`Added ${quantity} item(s) to cart`);
+                getCartData();
+            } catch (error) {
+                toast.error('Failed to add to cart');
+            }
         }
     }
 
@@ -94,7 +107,10 @@ export default function ProductDetails({ product }: { product: ICustomProduct })
                         <div>
                             <div className='flex items-center gap-3 my-4'>
                                 <div className="flex items-center border-2 rounded-full overflow-hidden w-fit">
-                                    <Counter />
+                                    <Counter 
+                                        initialValue={quantity}
+                                        onQuantityChange={handleQuantityChange}
+                                    />
                                 </div>
                                 <Button onClick={handleAddToCart} className='grow rounded-3xl py-4 text-lg font-bold hover:bg-transparent hover:text-foreground hover:border-foreground hover:border-2'>Add to Cart</Button>
                             </div>

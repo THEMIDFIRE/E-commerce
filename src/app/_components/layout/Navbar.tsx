@@ -7,7 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { useCart } from "@/context/CartContext";
+import { useCart, useWishlist } from "@/context/UserContext";
 import { IBrand, ICategory } from "@/types/All.type";
 import { ChevronDown, Heart, Menu, ShoppingBag, ShoppingCart, UserCogIcon, UserRound } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
@@ -15,7 +15,8 @@ import Link from "next/link";
 
 export default function Navbar({ categories, brands }: { categories: ICategory[], brands: IBrand[] }) {
     const { status, data } = useSession();
-    const {cartCount} = useCart();
+    const { cartCount } = useCart();
+    const { wishlistCount } = useWishlist()
 
     return (
         <>
@@ -161,9 +162,19 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                                 <NavigationMenuItem>
                                     <NavigationMenuLink href="/cart" aria-label="Cart" className="[&_svg:not([class*='size-'])]:size-5 relative">
                                         <ShoppingCart className="text-black " width={40} height={40} />
-                                        { cartCount > 0 &&
+                                        {cartCount > 0 &&
                                             <Badge className="size-4 rounded-full absolute top-0 right-0" variant="default">
                                                 {cartCount}
+                                            </Badge>
+                                        }
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                                <NavigationMenuItem>
+                                    <NavigationMenuLink href="/wishlist" aria-label="Cart" className="[&_svg:not([class*='size-'])]:size-5 relative">
+                                        <Heart className="text-black " width={40} height={40} />
+                                        {wishlistCount > 0 &&
+                                            <Badge className="size-4 rounded-full absolute top-0 right-0" variant="default">
+                                                {wishlistCount}
                                             </Badge>
                                         }
                                     </NavigationMenuLink>

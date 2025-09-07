@@ -2,7 +2,7 @@
 import { ProductElement } from '@/types/All.type';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useCart } from '@/context/CartContext';
+import { useCart } from '@/context/UserContext';
 import { Skeleton } from '@/components/ui/skeleton';
 import { rmvCartItem } from '@/lib/api';
 import { toast } from 'sonner';
@@ -89,17 +89,24 @@ export default function Cart() {
                                 )}
                             </TableBody>
                             <TableFooter>
-                                <span className='mt-4'>Select Payment Method</span>
-                                <RadioGroup defaultValue="cod" className='flex justify-between my-4'>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="cod" id="cod" />
-                                        <Label htmlFor="cod">Cash on Delivery</Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="card" id="card" />
-                                        <Label htmlFor="card">Card Payment</Label>
-                                    </div>
-                                </RadioGroup>
+                                <TableRow>
+                                    <TableCell>Select Payment Method:</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell>
+                                        <RadioGroup defaultValue="cod" className='flex justify-between my-4'>
+                                            <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="cod" id="cod" />
+                                                <Label htmlFor="cod">Cash on Delivery</Label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="card" id="card" />
+                                                <Label htmlFor="card">Card Payment</Label>
+                                            </div>
+                                        </RadioGroup>
+                                    </TableCell>
+                                </TableRow>
+
                                 <TableRow>
                                     <TableCell colSpan={2} className='p-0'>
                                         <Link href="/checkout">
