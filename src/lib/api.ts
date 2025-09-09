@@ -208,7 +208,6 @@ export async function getUserOrders(userId: string) {
     const data = await res.json();
     return data;
 }
-
 // Create online card checkout session and return redirect URL
 export async function createCardCheckoutSession(cartId: string, returnUrl: string) {
     const token = await getUserToken()
@@ -223,16 +222,64 @@ export async function createCardCheckoutSession(cartId: string, returnUrl: strin
     const data = await res.json();
     return data;
 }
-
-export async function forgetPassword(email: string) {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/auth/forgotPasswords`, {
+// Forget Password
+export async function forgetPassword(userEmail: any) {
+    // try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/forgotPasswords`, {
         method: 'POST',
         cache: 'no-store',
-        body: JSON.stringify(email)
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userEmail)
+    });
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data
+
+    // } catch (error) {
+    //     return {
+    //         success: false,
+    //         error: "Network error occurred"
+    //     };
+    // }
+}
+// Reset Code 
+export async function resetCode(ResetCodeForm: any) {
+    try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/verifyResetCode`, {
+        method: 'POST',
+        cache: 'no-store',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ResetCodeForm)
+    });
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data
+    } catch (error) {
+        console.error('Reset code API error:', error);
+        return {
+            success: false,
+            error: "Network error occurred"
+        };
+    }
+}
+export async function newPassword(NewPasswordForm: any) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/resetPassword`, {
+        method: 'PUT',
+        cache: 'no-store',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(NewPasswordForm)
     })
     if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`)
+        throw new Error(`Error: ${res.statusText}`);
     }
-    const data = await res.json()
+    const data = await res.json();
     return data
 }

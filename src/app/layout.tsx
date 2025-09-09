@@ -6,6 +6,7 @@ import Navbar from "./_components/layout/Navbar";
 import "./globals.css";
 import Providers from "../lib/Providers";
 import { getAllBrands, getAllCategories } from "@/lib/api";
+import { Suspense } from "react";
 
 const oxygen = Oxygen({
   subsets: ["latin"],
@@ -28,9 +29,11 @@ export default async function RootLayout({
       <body className={`${oxygen.className} antialiased`}>
         <Providers>
           <Navbar categories={categories} brands={brands} />
-          <main className="min-h-screen">
-            {children}
-          </main>
+          <Suspense fallback={<div>Loading...</div>}>
+            <main className="min-h-screen">
+              {children}
+            </main>
+          </Suspense>
           <Footer />
           <Toaster position="top-right" />
         </Providers>

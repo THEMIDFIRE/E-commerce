@@ -7,7 +7,12 @@ export async function middleware(request: NextRequest) {
         if (request.nextUrl.pathname.includes('/login') || request.nextUrl.pathname.includes('/register')) {
             return NextResponse.redirect(new URL('/', request.url))
         }
+        if (request.nextUrl.pathname.includes('/reset-code') || request.nextUrl.pathname.includes('/reset-password')) {
+            return NextResponse.redirect(new URL('/forget-password', request.url))
+        }
         return NextResponse.next()
+    } else if (request.nextUrl.pathname.includes('/reset-code') || request.nextUrl.pathname.includes('/reset-password')) {
+        return NextResponse.redirect(new URL('/forget-password', request.url))
     } else {
         if (!request.nextUrl.pathname.includes('/login') || !request.nextUrl.pathname.includes('/register')) {
             return NextResponse.rewrite(new URL('/login', request.url))
@@ -27,6 +32,7 @@ export const config = {
         // Auth routes
         '/login',
         '/register',
-        '/forget_password'
+        '/reset-code',
+        '/reset-password'
     ],
 }

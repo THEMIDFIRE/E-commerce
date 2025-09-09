@@ -11,6 +11,5 @@ export const getUserToken = async (returnDecoded = false) => {
         secret: process.env.AUTH_SECRET!
     })
     
-    // Return decoded token object if requested, otherwise return the inner token string
     return returnDecoded ? decoded : (decoded?.token as string)
 }
