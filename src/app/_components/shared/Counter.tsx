@@ -21,7 +21,7 @@ export default function Counter({ className, initialValue = 1, onQuantityChange 
         setQuantity(newQuantity);
         onQuantityChange?.(newQuantity);
     };
-    
+
     const decrement = () => {
         const newQuantity = Math.max(1, quantity - 1);
         setQuantity(newQuantity);

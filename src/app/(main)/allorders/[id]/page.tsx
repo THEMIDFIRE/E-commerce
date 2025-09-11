@@ -1,12 +1,11 @@
 "use client"
 
-import CartItems from "@/app/_components/CartCards/CartItems";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { IOrder } from "@/types/All.type";
 import { getUserOrders } from "@/lib/api";
 import { getUserToken } from "@/lib/server-utils";
+import { IOrder } from "@/types/All.type";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function OrderDetails() {
     const params = useParams();
@@ -19,17 +18,17 @@ export default function OrderDetails() {
             try {
                 setLoading(true);
                 const decoded = await getUserToken(true);
-                
+
                 if (decoded && typeof decoded === 'object' && 'user' in decoded) {
                     const userData = {
                         ...(decoded.user as any),
                         id: decoded.id
                     };
-                    
+
                     const orders = await getUserOrders(userData.id);
                     // Find the specific order by _id
                     const specificOrder = orders.find((order: IOrder) => order._id === params.id);
-                    
+
                     if (specificOrder) {
                         setOrder(specificOrder);
                     } else {
@@ -77,8 +76,8 @@ export default function OrderDetails() {
                                 <TableRow key={item._id} className="hover:bg-gray-100">
                                     <TableCell>
                                         <div className="flex items-center gap-3">
-                                            <img 
-                                                src={item.product?.imageCover} 
+                                            <img
+                                                src={item.product?.imageCover}
                                                 alt={item.product?.title}
                                                 className="w-12 h-12 object-cover rounded"
                                             />

@@ -37,7 +37,7 @@ export default function ResetCode() {
             const res = await resetCode({
                 resetCode: formData.resetCode,
             })
-            
+
             if (res?.status === "Success") {
                 toast.success(res?.message || "Reset code verified successfully!")
                 router.push('/reset-password')

@@ -38,7 +38,7 @@ export default function ResetPassword() {
                 email: formData.email,
                 newPassword: formData.newPassword,
             })
-            
+
             if (res?.token) {
                 toast.success(res?.message || "Password successfully changed")
                 router.push('/login')

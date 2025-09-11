@@ -1,63 +1,14 @@
-"use client"
-
 import { OrderCard, OrderCardSkeleton } from "@/app/_components/shared/AllCards";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getUserOrders } from "@/lib/api";
-import { getUserToken } from "@/lib/server-utils";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { getUserData, getUserOrders } from "@/lib/api";
 import { IOrder } from "@/types/All.type";
-import { useEffect, useState } from "react";
+import { Suspense } from "react";
 
-interface User {
-    id: string;
-}
+export default async function Orders() {
 
-export default function Orders() {
-    const [userData, setUserData] = useState<User | null>(null)
-    const [orders, setOrders] = useState<IOrder[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
-
-    useEffect(() => {
-        async function extractTokenData() {
-            try {
-                const decoded = await getUserToken(true)
-
-                if (decoded && typeof decoded === 'object' && 'user' in decoded) {
-                    const userData = {
-                        ...(decoded.user as any),
-                        id: decoded.id
-                    } as User
-                    setUserData(userData)
-                }
-            } catch (error) {
-                console.error('Error extracting token data:', error)
-            }
-        }
-
-        extractTokenData()
-    }, [])
-
-    const userId = userData?.id as string
-    useEffect(() => {
-        async function getOrderHistory() {
-            if (!userId) return;
-
-            try {
-                setLoading(true)
-                setError(null)
-                const response = await getUserOrders(userId)
-                setOrders(response || [])
-            } catch (error) {
-                console.error('Error fetching orders:', error)
-                setError('Failed to fetch orders')
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        getOrderHistory()
-    }, [userId])
-
+    const user = await getUserData()
+    const userId = user?.decoded?.id
+    const orders = await getUserOrders(userId)
 
     return (
         <section>
@@ -76,13 +27,11 @@ export default function Orders() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {loading ? 
-                            Array.from({ length: 3 }).map((_, idx) => (
-                                <OrderCardSkeleton key={idx} />
-                            )) :
-                            orders.map((order) => (
-                                <OrderCard key={order._id} order={order} />
-                            ))}
+                            <Suspense fallback={<OrderCardSkeleton />}>
+                                {orders.map((order: IOrder) => (
+                                    <OrderCard key={order._id} order={order} />
+                                ))}
+                            </Suspense>
                         </TableBody>
                     </Table>
                 </div>

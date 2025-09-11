@@ -4,19 +4,18 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import GoBack from "@/app/_components/shared/GoBack"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { forgetPassword } from "@/lib/api"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { PulseLoader } from "react-spinners"
 import { toast } from "sonner"
-import { useRouter } from "next/navigation"
-import GoBack from "@/app/_components/shared/GoBack"
 
 const formSchema = z.object({
-    email: z.string().email("Please enter a valid email"),
+    email: z.email("Please enter a valid email"),
 })
 
 type UserEmail = z.infer<typeof formSchema>
@@ -40,8 +39,8 @@ export default function ForgetPassword() {
                 toast.success(res.message || "Reset code sent successfully!")
                 router.push('/resetCode')
             } else {
-                const errorMessage = res.error || 
-                    res.message || 
+                const errorMessage = res.error ||
+                    res.message ||
                     "Failed to send reset code"
                 toast.error(errorMessage)
             }

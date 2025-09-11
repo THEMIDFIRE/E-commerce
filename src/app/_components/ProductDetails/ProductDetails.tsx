@@ -6,14 +6,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
+import { useCart } from '@/context/UserContext';
+import { addToCart, updateCartQuantity } from '@/lib/api';
+import { getUserToken } from '@/lib/server-utils';
 import { ICustomProduct } from '@/types/All.type';
 import { HeartIcon, PackageIcon, SlashIcon, StarIcon, TruckIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import Counter from '../shared/Counter';
-import { getUserToken } from '@/lib/server-utils';
-import { addToCart, updateCartQuantity } from '@/lib/api';
 import { toast } from 'sonner';
-import { useCart } from '@/context/UserContext';
+import Counter from '../shared/Counter';
 
 export default function ProductDetails({ product }: { product: ICustomProduct }) {
     const [api, setApi] = useState<CarouselApi>()
@@ -44,12 +44,12 @@ export default function ProductDetails({ product }: { product: ICustomProduct })
             try {
                 // First add one item to cart
                 await addToCart(product._id);
-                
+
                 // Then update quantity to desired amount
                 if (quantity > 1) {
                     await updateCartQuantity(product._id, quantity);
                 }
-                
+
                 toast.success(`Added ${quantity} item(s) to cart`);
                 getCartData();
             } catch (error) {
@@ -107,7 +107,7 @@ export default function ProductDetails({ product }: { product: ICustomProduct })
                         <div>
                             <div className='flex items-center gap-3 my-4'>
                                 <div className="flex items-center border-2 rounded-full overflow-hidden w-fit">
-                                    <Counter 
+                                    <Counter
                                         initialValue={quantity}
                                         onQuantityChange={handleQuantityChange}
                                     />

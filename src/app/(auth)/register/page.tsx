@@ -8,15 +8,15 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { toast } from "sonner"
-import { useState } from "react"
-import { PulseLoader } from "react-spinners";
 import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { PulseLoader } from "react-spinners"
+import { toast } from "sonner"
 
 const formSchema = z.object({
     name: z.string().min(3, "Name must be at least 3 characters"),
     email: z.string().email("Please enter a valid email"),
-    password: z.string().regex(/^[A-Z](?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/, 
+    password: z.string().regex(/^[A-Z](?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/,
         "Password must start with uppercase, contain lowercase, number, special character, and be at least 9 characters"),
     rePassword: z.string(),
     phone: z.string().min(8, "Phone must be at least 8 characters"),
@@ -30,9 +30,9 @@ type RegisterForm = z.infer<typeof formSchema>
 export default function Register() {
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
-    
+
     const form = useForm<RegisterForm>({
-        resolver: zodResolver(formSchema), 
+        resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
             email: '',
@@ -54,9 +54,9 @@ export default function Register() {
                 }
             })
             console.log('res', res)
-            
+
             const result = await res.json()
-            
+
             if (res.ok) {
                 toast.success("Account created successfully! Please login.")
                 router.push('/login')

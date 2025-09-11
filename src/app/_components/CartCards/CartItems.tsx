@@ -11,7 +11,7 @@ import Counter from "../shared/Counter";
 
 export default function CartItems(item: ProductElement) {
     const { getCartData } = useCart();
-    
+
     const handleRemove = async () => {
         const data = await rmvCartItem(item?.product?._id);
         getCartData()

@@ -62,7 +62,7 @@ export function SubCatCard({ subcategory, categoryId }: { subcategory: IBrand, c
 export function ProdCard({ product }: { product: IProduct }) {
     const { getCartData } = useCart();
     const { getWishlistData, wishlist } = useWishlist()
-    
+
     const isInWishlist = wishlist?.data?.some((item: any) => item._id === product._id)
 
     const handleAddToCart = async () => {
@@ -124,14 +124,13 @@ export function ProdCard({ product }: { product: IProduct }) {
                 </div>
                 <div className="absolute bottom-2.5 right-2.5 flex gap-2.5">
                     <ShoppingCart size={20} className="hover:fill-accent-foreground hover:cursor-pointer" onClick={handleAddToCart} />
-                    <HeartIcon 
-                        size={20} 
-                        className={`hover:cursor-pointer ${
-                            isInWishlist 
-                                ? "fill-red-500 stroke-red-500" 
+                    <HeartIcon
+                        size={20}
+                        className={`hover:cursor-pointer ${isInWishlist
+                                ? "fill-red-500 stroke-red-500"
                                 : "hover:fill-red-500 hover:stroke-red-500"
-                        }`} 
-                        onClick={handleWishlistToggle} 
+                            }`}
+                        onClick={handleWishlistToggle}
                     />
                 </div>
             </div>

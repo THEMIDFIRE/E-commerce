@@ -9,10 +9,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
-import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { PulseLoader } from "react-spinners"
+import { toast } from "sonner"
 
 const formSchema = z.object({
     email: z.email("Please enter a valid email"),

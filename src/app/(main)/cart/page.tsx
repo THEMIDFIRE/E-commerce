@@ -1,22 +1,20 @@
 "use client";
-import { ProductElement } from '@/types/All.type';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useCart } from '@/context/UserContext';
-import { Skeleton } from '@/components/ui/skeleton';
-import { rmvCartItem, createCardCheckoutSession } from '@/lib/api';
-import { toast } from 'sonner';
-import Link from 'next/link';
 import CartItems from '@/app/_components/CartCards/CartItems';
 import CartSkeleton from '@/app/_components/CartCards/CartSkeleton';
-import OrderSummarySkeleton from '@/app/_components/CartCards/OrderSummarySkeleton';
 import OrderSummary from '@/app/_components/CartCards/OrderSummary';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { z } from 'zod'
-import { useForm } from 'react-hook-form';
+import OrderSummarySkeleton from '@/app/_components/CartCards/OrderSummarySkeleton';
+import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useCart } from '@/context/UserContext';
+import { createCardCheckoutSession, rmvCartItem } from '@/lib/api';
+import { ProductElement } from '@/types/All.type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 
 export default function Cart() {
@@ -175,9 +173,9 @@ export default function Cart() {
 
                                 <TableRow>
                                     <TableCell colSpan={2} className='p-0'>
-                                            <Button form="paymentForm" type='submit' className='w-full rounded-none rounded-b-md'>
-                                                Proceed to Checkout
-                                            </Button>
+                                        <Button form="paymentForm" type='submit' className='w-full rounded-none rounded-b-md'>
+                                            Proceed to Checkout
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             </TableFooter>

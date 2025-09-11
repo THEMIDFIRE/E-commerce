@@ -1,17 +1,17 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { useForm } from "react-hook-form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
+import { useCart } from "@/context/UserContext";
+import { checkoutCOD } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { PulseLoader } from "react-spinners";
-import { z } from "zod";
-import { checkoutCOD } from "@/lib/api";
-import { useCart } from "@/context/UserContext";
 import { toast } from "sonner";
-import { redirect } from "next/navigation";
+import { z } from "zod";
 
 const formSchema = z.object({
     details: z.string().min(10),
@@ -25,13 +25,13 @@ export default function Checkout() {
     const [isLoading, setIsLoading] = useState(false)
     const { cart } = useCart()
     const cartId = cart?.cartId
-    
+
     const form = useForm<CheckoutForm>({
         resolver: zodResolver(formSchema),
     })
-    
+
     const handleCheckout = async (data: CheckoutForm) => {
-        const formData = {"shippingAddress": data}
+        const formData = { "shippingAddress": data }
         checkoutCOD(cartId, formData)
         toast.success("Order placed successfully")
         redirect('/allorders')

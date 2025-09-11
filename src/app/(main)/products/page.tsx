@@ -1,10 +1,10 @@
 import { MobileFilters, SideFilters } from '@/app/_components/Filter/Filters';
+import { SearchInput } from '@/app/_components/Filter/SearchInput';
+import { ProdCard } from '@/app/_components/shared/AllCards';
+import { getAllBrands, getAllCategories, getAllProducts, getSubcategories, getUserData } from '@/lib/api';
 import { IProduct } from '@/types/All.type';
-import { getAllBrands, getAllCategories, getAllProducts, getSubcategories } from '@/lib/api';
 import { Suspense } from 'react';
 import SkeletonProducts from '../../_components/shared/SkeletonProducts';
-import { ProdCard } from '@/app/_components/shared/AllCards';
-import { SearchInput } from '@/app/_components/Filter/SearchInput';
 
 interface ProductsPageProps {
   searchParams: {
@@ -22,6 +22,8 @@ export default async function Products({ searchParams }: ProductsPageProps) {
     const categories = await getAllCategories();
     const brands = await getAllBrands();
     const subcategories = await getSubcategories();
+    const user = await getUserData();
+    console.log(user?.decoded?.id)
     
     const sortOptions = [
         { label: 'Lowest Price', value: 'price' },

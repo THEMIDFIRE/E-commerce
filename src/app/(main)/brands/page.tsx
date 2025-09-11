@@ -1,6 +1,6 @@
-import { BrandCard } from '@/app/_components/shared/AllCards'
+import { BrandCard } from '@/app/_components/shared/AllCards';
+import { getAllBrands } from '@/lib/api';
 import { IBrand } from '@/types/All.type';
-import { getAllBrands } from '@/lib/api'
 
 export default async function AllBrands() {
     const data = await getAllBrands();

@@ -1,5 +1,16 @@
 import { getUserToken } from "./server-utils";
-
+// Get User Data
+export async function getUserData() {
+    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/auth/verifyToken`, {
+        cache: "no-store",
+        headers: { token: await getUserToken() as string }
+    });
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data;
+}
 // Get All Products
 export async function getAllProducts(params?: Record<string, string | string[]>) {
     let queryString = '';
@@ -26,8 +37,6 @@ export async function getAllProducts(params?: Record<string, string | string[]>)
     const { data } = await res.json();
     return data;
 }
-
-// ... rest of your existing API functions remain the same ...
 // Get specific product details
 export async function getSpecificProduct(id: string) {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products/${id}`);

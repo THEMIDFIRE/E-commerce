@@ -1,14 +1,13 @@
 'use client';
 
-import { IBrand, ICategory, ISubcategory } from "@/types/All.type";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { IBrand, ICategory, ISubcategory } from "@/types/All.type";
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from "react";
 
 interface FilterProps {
     categories: ICategory[];
@@ -18,20 +17,20 @@ interface FilterProps {
     initialFilters?: any;
 }
 
-export function SideFilters({ 
-    categories, 
-    brands, 
-    subcategories, 
+export function SideFilters({
+    categories,
+    brands,
+    subcategories,
     sortOptions,
     initialFilters = {}
 }: FilterProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
-    
+
     const [selectedCategories, setSelectedCategories] = useState<string[]>(
-        Array.isArray(initialFilters['category[in]']) 
-            ? initialFilters['category[in]'] 
+        Array.isArray(initialFilters['category[in]'])
+            ? initialFilters['category[in]']
             : initialFilters['category[in]'] ? [initialFilters['category[in]']] : []
     );
     const [selectedBrands, setSelectedBrands] = useState<string[]>(
@@ -43,12 +42,12 @@ export function SideFilters({
     useEffect(() => {
         if (initialFilters['category[in]']) {
             setSelectedCategories(
-                Array.isArray(initialFilters['category[in]']) 
-                    ? initialFilters['category[in]'] 
+                Array.isArray(initialFilters['category[in]'])
+                    ? initialFilters['category[in]']
                     : [initialFilters['category[in]']]
             );
         }
-        
+
         if (initialFilters.brand) {
             setSelectedBrands([initialFilters.brand]);
         }
@@ -56,12 +55,12 @@ export function SideFilters({
 
     const updateSearchParams = (newParams: Record<string, string | string[] | null>) => {
         const params = new URLSearchParams(searchParams.toString());
-        
+
         // Remove existing filter params
         ['category[in]', 'brand', 'price[gte]', 'price[lte]', 'sort'].forEach(param => {
             params.delete(param);
         });
-        
+
         // Add new params
         Object.entries(newParams).forEach(([key, value]) => {
             if (value !== null) {
@@ -72,7 +71,7 @@ export function SideFilters({
                 }
             }
         });
-        
+
         router.replace(`${pathname}?${params.toString()}`);
     };
 
@@ -80,7 +79,7 @@ export function SideFilters({
         const newCategories = checked
             ? [...selectedCategories, categoryId]
             : selectedCategories.filter(id => id !== categoryId);
-        
+
         setSelectedCategories(newCategories);
         updateSearchParams({ 'category[in]': newCategories.length > 0 ? newCategories : null });
     };
@@ -89,14 +88,14 @@ export function SideFilters({
         const newBrands = checked
             ? [...selectedBrands, brandId]
             : selectedBrands.filter(id => id !== brandId);
-        
+
         setSelectedBrands(newBrands);
         updateSearchParams({ brand: newBrands.length > 0 ? newBrands[0] : null });
     };
 
     const handlePriceRangeChange = (range: string, checked: boolean) => {
         let priceFilters: Record<string, string | null> = {};
-        
+
         if (checked) {
             switch (range) {
                 case '0-100':
@@ -115,7 +114,7 @@ export function SideFilters({
         } else {
             priceFilters = { 'price[gte]': null, 'price[lte]': null };
         }
-        
+
         updateSearchParams(priceFilters);
     };
 
@@ -126,7 +125,7 @@ export function SideFilters({
     return (
         <div className="hidden md:block lg:w-1/3">
             <h4 className='text-2xl font-bold mb-5'>Filters</h4>
-            
+
             {/* Sort Dropdown */}
             <div className="mb-6">
                 <Label className="text-sm font-medium mb-2 block">Sort By</Label>
@@ -151,10 +150,10 @@ export function SideFilters({
                     <div className='mt-4'>
                         {categories.map((category) => (
                             <div className='flex items-center gap-2 mb-4' key={category._id}>
-                                <Checkbox 
+                                <Checkbox
                                     id={`category-${category._id}`}
                                     checked={selectedCategories.includes(category._id)}
-                                    onCheckedChange={(checked) => 
+                                    onCheckedChange={(checked) =>
                                         handleCategoryChange(category._id, checked as boolean)
                                     }
                                 />
@@ -183,10 +182,10 @@ export function SideFilters({
                     <div className='mt-4'>
                         {brands.map((brand) => (
                             <div className='flex items-center gap-2 mb-4' key={brand._id}>
-                                <Checkbox 
+                                <Checkbox
                                     id={`brand-${brand._id}`}
                                     checked={selectedBrands.includes(brand._id)}
-                                    onCheckedChange={(checked) => 
+                                    onCheckedChange={(checked) =>
                                         handleBrandChange(brand._id, checked as boolean)
                                     }
                                 />
@@ -207,9 +206,9 @@ export function SideFilters({
                             { label: '$500 - $1000', value: '500-1000' }
                         ].map((range) => (
                             <div className='flex items-center gap-2 mb-4' key={range.value}>
-                                <Checkbox 
+                                <Checkbox
                                     id={`price-range-${range.value}`}
-                                    onCheckedChange={(checked) => 
+                                    onCheckedChange={(checked) =>
                                         handlePriceRangeChange(range.value, checked as boolean)
                                     }
                                 />
@@ -223,20 +222,20 @@ export function SideFilters({
     );
 }
 
-export function MobileFilters({ 
-    categories, 
-    brands, 
-    subcategories, 
+export function MobileFilters({
+    categories,
+    brands,
+    subcategories,
     sortOptions,
     initialFilters = {}
 }: FilterProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
-    
+
     const [selectedCategories, setSelectedCategories] = useState<string[]>(
-        Array.isArray(initialFilters['category[in]']) 
-            ? initialFilters['category[in]'] 
+        Array.isArray(initialFilters['category[in]'])
+            ? initialFilters['category[in]']
             : initialFilters['category[in]'] ? [initialFilters['category[in]']] : []
     );
     const [selectedBrands, setSelectedBrands] = useState<string[]>(
@@ -245,12 +244,12 @@ export function MobileFilters({
 
     const updateSearchParams = (newParams: Record<string, string | string[] | null>) => {
         const params = new URLSearchParams(searchParams.toString());
-        
+
         // Remove existing filter params
         ['category[in]', 'brand', 'price[gte]', 'price[lte]', 'sort'].forEach(param => {
             params.delete(param);
         });
-        
+
         // Add new params
         Object.entries(newParams).forEach(([key, value]) => {
             if (value !== null) {
@@ -261,7 +260,7 @@ export function MobileFilters({
                 }
             }
         });
-        
+
         router.replace(`${pathname}?${params.toString()}`);
     };
 
@@ -269,7 +268,7 @@ export function MobileFilters({
         const newCategories = checked
             ? [...selectedCategories, categoryId]
             : selectedCategories.filter(id => id !== categoryId);
-        
+
         setSelectedCategories(newCategories);
         updateSearchParams({ 'category[in]': newCategories.length > 0 ? newCategories : null });
     };
@@ -278,7 +277,7 @@ export function MobileFilters({
         const newBrands = checked
             ? [...selectedBrands, brandId]
             : selectedBrands.filter(id => id !== brandId);
-        
+
         setSelectedBrands(newBrands);
         updateSearchParams({ brand: newBrands.length > 0 ? newBrands[0] : null });
     };
@@ -297,7 +296,7 @@ export function MobileFilters({
                     <SheetHeader>
                         <SheetTitle>Filters</SheetTitle>
                     </SheetHeader>
-                    
+
                     <ScrollArea className='max-h-[calc(100dvh-150px)]'>
                         {/* Sort Section */}
                         <div className='border-1 py-6 px-4 my-4'>
@@ -322,10 +321,10 @@ export function MobileFilters({
                             <div className='mt-4'>
                                 {categories.map((category) => (
                                     <div className='flex items-center gap-2 mb-4' key={category._id}>
-                                        <Checkbox 
+                                        <Checkbox
                                             id={`mobile-category-${category._id}`}
                                             checked={selectedCategories.includes(category._id)}
-                                            onCheckedChange={(checked) => 
+                                            onCheckedChange={(checked) =>
                                                 handleCategoryChange(category._id, checked as boolean)
                                             }
                                         />
@@ -341,10 +340,10 @@ export function MobileFilters({
                             <div className='mt-4'>
                                 {brands.map((brand) => (
                                     <div className='flex items-center gap-2 mb-4' key={brand._id}>
-                                        <Checkbox 
+                                        <Checkbox
                                             id={`mobile-brand-${brand._id}`}
                                             checked={selectedBrands.includes(brand._id)}
-                                            onCheckedChange={(checked) => 
+                                            onCheckedChange={(checked) =>
                                                 handleBrandChange(brand._id, checked as boolean)
                                             }
                                         />
