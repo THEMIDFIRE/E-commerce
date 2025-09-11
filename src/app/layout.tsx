@@ -1,12 +1,11 @@
 import { Toaster } from "@/components/ui/sonner";
+import { getAllBrands, getAllCategories } from "@/lib/api";
 import type { Metadata } from "next";
 import { Oxygen } from "next/font/google";
+import Providers from "../lib/Providers";
 import Footer from "./_components/layout/Footer";
 import Navbar from "./_components/layout/Navbar";
 import "./globals.css";
-import Providers from "../lib/Providers";
-import { getAllBrands, getAllCategories } from "@/lib/api";
-import { Suspense } from "react";
 
 const oxygen = Oxygen({
   subsets: ["latin"],
@@ -29,11 +28,9 @@ export default async function RootLayout({
       <body className={`${oxygen.className} antialiased`}>
         <Providers>
           <Navbar categories={categories} brands={brands} />
-          <Suspense fallback={<div>Loading...</div>}>
-            <main className="min-h-screen">
-              {children}
-            </main>
-          </Suspense>
+          <main className="min-h-screen">
+            {children}
+          </main>
           <Footer />
           <Toaster position="top-right" />
         </Providers>

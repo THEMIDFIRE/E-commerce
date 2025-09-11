@@ -1,8 +1,23 @@
 import { getUserToken } from "./server-utils";
 
 // Get All Products
-export async function getAllProducts() {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products`, {
+export async function getAllProducts(params?: Record<string, string | string[]>) {
+    let queryString = '';
+    if (params) {
+        const searchParams = new URLSearchParams();
+        
+        Object.entries(params).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                value.forEach(v => searchParams.append(key, v));
+            } else if (value) {
+                searchParams.append(key, value);
+            }
+        });
+        
+        queryString = `?${searchParams.toString()}`;
+    }
+    
+    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products${queryString}`, {
         cache: "force-cache"
     });
     if (!res.ok) {
@@ -11,6 +26,8 @@ export async function getAllProducts() {
     const { data } = await res.json();
     return data;
 }
+
+// ... rest of your existing API functions remain the same ...
 // Get specific product details
 export async function getSpecificProduct(id: string) {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products/${id}`);
@@ -50,8 +67,8 @@ export async function getSubCategoriesForCategory(id: string) {
     return data;
 }
 // Get Subcategories data
-export async function getSpecificSubcategory(id: string) {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/subcategories/${id}`);
+export async function getSubcategories(id?: string) {
+    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/subcategories/${id ? id : ""}`);
     if (!res.ok) {
         throw new Error(`Error: ${res.statusText}`);
     }
