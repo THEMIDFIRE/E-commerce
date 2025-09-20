@@ -309,3 +309,32 @@ export async function newPassword(NewPasswordForm: any) {
     const data = await res.json();
     return data
 }
+
+export async function updateProfile(profileInfo: any) {
+    const token = await getUserToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/updateMe`, {
+        method: 'PUT',
+        cache: 'no-store',
+        headers: { 'Content-Type': 'application/json', token: token as string },
+        body: JSON.stringify(profileInfo)
+    })
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data
+}
+export async function changePassword(passwordForm: any) {
+    const token = await getUserToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/changeMyPassword`, {
+        method: 'PUT',
+        cache: 'no-store',
+        headers: { 'Content-Type': 'application/json', token: token as string },
+        body: JSON.stringify(passwordForm)
+    })
+    if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data
+}

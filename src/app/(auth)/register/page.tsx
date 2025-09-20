@@ -19,7 +19,7 @@ const formSchema = z.object({
     password: z.string().regex(/^[A-Z](?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/,
         "Password must start with uppercase, contain lowercase, number, special character, and be at least 9 characters"),
     rePassword: z.string(),
-    phone: z.string().min(8, "Phone must be at least 8 characters"),
+    phone: z.string().min(11, "Phone must be at least 11 characters"),
 }).refine((data) => data.password === data.rePassword, {
     message: "Passwords don't match",
     path: ["rePassword"],

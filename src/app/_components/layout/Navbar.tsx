@@ -189,7 +189,7 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent className="w-56 p-4 space-y-2.5">
                                                 <DropdownMenuLabel>
-                                                    <p>{data.user?.name || 'User'}</p>
+                                                    <p>{data.user?.name || 'Guest'}</p>
                                                 </DropdownMenuLabel>
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem asChild>
