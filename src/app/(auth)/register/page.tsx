@@ -43,7 +43,6 @@ export default function Register() {
     })
 
     const onSubmit = async (data: RegisterForm) => {
-        console.log('data', data)
         try {
             setIsLoading(true)
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/signup`, {
@@ -53,7 +52,6 @@ export default function Register() {
                     'Content-Type': 'application/json'
                 }
             })
-            console.log('res', res)
 
             const result = await res.json()
 

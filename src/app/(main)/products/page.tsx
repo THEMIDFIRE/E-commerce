@@ -24,8 +24,6 @@ export default async function Products({ searchParams }: ProductsPageProps) {
     const brands = await getAllBrands();
     const subcategories = await getSubcategories();
 
-    console.log(metadata)
-
     const sortOptions = [
         { label: 'Lowest Price', value: 'price' },
         { label: 'Highest Price', value: '-price' },
