@@ -36,7 +36,6 @@ export function SideFilters({
     const [selectedBrands, setSelectedBrands] = useState<string[]>(
         initialFilters.brand ? [initialFilters.brand] : []
     );
-    const [selectedPriceRange, setSelectedPriceRange] = useState<string[]>([]);
 
     // Initialize state from URL params
     useEffect(() => {

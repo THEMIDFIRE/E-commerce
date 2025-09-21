@@ -146,7 +146,7 @@ export interface IOrder {
     };
     taxPrice: number;
     shippingPrice: number;
-    totalOrderPrice: number; // Change from string to number
+    totalOrderPrice: number;
     paymentMethodType: string;
     isPaid: boolean;
     isDelivered: boolean;
@@ -181,8 +181,8 @@ export interface IOrder {
         };
         price: number;
     }[];
-    createdAt: string; // Change from Date to string
-    updatedAt: string; // Change from Date to string
+    createdAt: string;
+    updatedAt: string;
     id: number;
     __v: number;
 }

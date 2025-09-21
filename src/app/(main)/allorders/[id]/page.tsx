@@ -1,5 +1,7 @@
 "use client"
 
+import { OrderDetailsSkeleton } from "@/app/_components/shared/AllCards";
+import GoBack from "@/app/_components/shared/GoBack";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 import { getUserOrders } from "@/lib/api";
 import { getUserToken } from "@/lib/server-utils";
@@ -48,12 +50,13 @@ export default function OrderDetails() {
         }
     }, [params.id]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <OrderDetailsSkeleton />;
     if (error) return <div>Error: {error}</div>;
 
     return (
         <section>
             <div className="container max-w-4/5 mx-auto my-10">
+                <GoBack />
                 <h2 className="text-2xl font-bold mb-4">Order Details</h2>
                 <div className="mb-6 p-4 bg-gray-100 shadow rounded-lg flex items-center justify-evenly">
                     <p><strong>Order ID:</strong> #{order?.id}</p>

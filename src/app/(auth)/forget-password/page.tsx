@@ -36,7 +36,7 @@ export default function ForgetPassword() {
 
             if (res.statusMsg === "success") {
                 toast.success(res.message)
-                document.cookie = `reset-flow-step=code; path=/; max-age=1800; SameSite=Lax` // 30 minutes
+                document.cookie = `reset-flow-step=code; path=/; max-age=600; SameSite=Lax` // 10 minutes
                 router.push('/reset-code')
             } else {
                 toast.error(res.message)

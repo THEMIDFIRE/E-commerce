@@ -40,7 +40,7 @@ export default function ResetCode() {
             if (res?.status === "Success") {
                 toast.success(res?.message || "Reset code verified successfully!")
                 
-                document.cookie = `reset-flow-step=password; path=/; max-age=1800; SameSite=Lax` // 30 minutes
+                document.cookie = `reset-flow-step=password; path=/; max-age=600; SameSite=Lax` // 10 minutes
                 
                 router.push('/reset-password')
             } else {

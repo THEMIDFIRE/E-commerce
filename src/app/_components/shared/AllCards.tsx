@@ -1,7 +1,7 @@
 "use client"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TableCell, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 import { useCart, useWishlist } from "@/context/UserContext";
 import { addToCart, addToWishlist, rmvFromWishlist } from "@/lib/api";
 import { getUserToken } from "@/lib/server-utils";
@@ -10,6 +10,7 @@ import { HeartIcon, ShoppingCart, Slash, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
+import GoBack from "./GoBack";
 
 export function BrandCard({ brand }: { brand: IBrand }) {
     return (
@@ -127,8 +128,8 @@ export function ProdCard({ product }: { product: IProduct }) {
                     <HeartIcon
                         size={20}
                         className={`hover:cursor-pointer ${isInWishlist
-                                ? "fill-red-500 stroke-red-500"
-                                : "hover:fill-red-500 hover:stroke-red-500"
+                            ? "fill-red-500 stroke-red-500"
+                            : "hover:fill-red-500 hover:stroke-red-500"
                             }`}
                         onClick={handleWishlistToggle}
                     />
@@ -289,5 +290,50 @@ export function OrderCardSkeleton() {
                 <Skeleton className="h-3 w-1/2 bg-gray-300" />
             </TableCell>
         </TableRow>
+    )
+}
+
+export function OrderDetailsSkeleton() {
+    return (
+        <section>
+            <div className="container max-w-4/5 mx-auto my-10">
+            <GoBack/>
+                <h2 className="text-2xl font-bold mb-4">Order Details</h2>
+                <div className="mb-6 p-4 bg-gray-100 shadow rounded-lg flex items-center justify-evenly">
+                    <p className="flex items-center gap-2"><span className="font-semibold">Order ID:</span> # <Skeleton className="h-3 w-10 bg-gray-300" /></p>
+                    <p className="flex items-center gap-2"><span className="font-semibold">Payment Method:</span> <Skeleton className="h-3 w-10 bg-gray-300" /></p>
+                    <p className="flex items-center gap-2"><span className="font-semibold">Status:</span> <Skeleton className="h-3 w-10 bg-gray-300" /></p>
+                    <p className="flex items-center gap-2"><span className="font-semibold">Total:</span>  EGP <Skeleton className="h-3 w-10 bg-gray-300" /></p>
+                </div>
+                <Table>
+                    <TableHeader>
+                        <TableRow className="bg-gray-200 hover:bg-gray-100">
+                            <TableCell>Product</TableCell>
+                            <TableCell>Price</TableCell>
+                            <TableCell>Quantity</TableCell>
+                            <TableCell>Total</TableCell>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow className="hover:bg-gray-100">
+                            <TableCell>
+                                <div className="flex items-center gap-3">
+                                    <div className="img">
+                                        <Skeleton className="size-10 bg-gray-300" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="font-medium"><Skeleton className="h-3 w-10 bg-gray-300" /></p>
+                                        <p className="text-sm text-gray-500"><Skeleton className="h-3 w-10 bg-gray-300" /></p>
+                                    </div>
+                                </div>
+                            </TableCell>
+                            <TableCell className="flex items-center gap-2"><Skeleton className="h-3 w-10 bg-gray-300" /> EGP</TableCell>
+                            <TableCell><Skeleton className="h-3 w-10 bg-gray-300" /></TableCell>
+                            <TableCell className="flex items-center gap-2"><Skeleton className="h-3 w-10 bg-gray-300" /> EGP</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+        </section>
     )
 }

@@ -31,25 +31,13 @@ export default async function Products({ searchParams }: ProductsPageProps) {
         { label: 'Oldest', value: 'createdAt' },
     ];
 
-    // "metadata": {
-    //     "currentPage": 2,
-    //     "numberOfPages": 5,
-    //     "limit": 12,
-    //     "nextPage": 3,
-    //     "prevPage": 1
-    // },
-
     const currentPage = metadata.currentPage
-    const numberOfPages = metadata.numberOfPages
-    const limit = metadata.limit
     const nextPage = metadata.nextPage
     const prevPage = metadata.prevPage
 
-    // Helper function to create URL with preserved search params
     const createPaginationUrl = (page: number) => {
         const params = new URLSearchParams();
         
-        // Add all current search params except page
         Object.entries(searchParams).forEach(([key, value]) => {
             if (key !== 'page' && value) {
                 if (Array.isArray(value)) {
@@ -60,7 +48,6 @@ export default async function Products({ searchParams }: ProductsPageProps) {
             }
         });
         
-        // Add the new page number (only add if not page 1 to keep URLs clean)
         if (page > 1) {
             params.set('page', page.toString());
         }
