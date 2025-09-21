@@ -2,11 +2,9 @@ import { SubCatCard } from '@/app/_components/shared/AllCards'
 import { getSpecificCategory, getSubCategoriesForCategory } from '@/lib/api'
 
 export default async function Category({ params }: { params: { id: string } }) {
-    const id = await params.id
-    const [categoryData, subcategoriesData] = await Promise.all([
-        getSpecificCategory(id),
-        getSubCategoriesForCategory(id).catch(() => []) // Fallback to empty array if subcategories don't exist
-    ])
+    const id = params.id
+    const categoryData = await getSpecificCategory(id)
+    const subcategoriesData = await getSubCategoriesForCategory(id)
 
     return (
         <section className='pt-4 pb-16'>
