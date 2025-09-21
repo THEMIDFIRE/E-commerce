@@ -1,7 +1,7 @@
 import { getUserToken } from "./server-utils";
 // Get User Data
 export async function getUserData() {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/auth/verifyToken`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/verifyToken`, {
         cache: "no-store",
         headers: { token: await getUserToken() as string }
     });
@@ -25,7 +25,7 @@ export async function getAllProducts(params?: Record<string, string | string[]>)
         queryString = `&${searchParams.toString()}`;
     }
     
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products?limit=12${queryString}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products?limit=12${queryString}`, {
         cache: "force-cache"
     });
     const products = await res.json();
@@ -33,13 +33,13 @@ export async function getAllProducts(params?: Record<string, string | string[]>)
 }
 // Get specific product details
 export async function getSpecificProduct(id: string) {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products/${id}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/${id}`);
     const { data } = await res.json();
     return data;
 }
 // Get all categories
 export async function getAllCategories() {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/categories`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories`, {
         cache: "force-cache"
     });
     const { data } = await res.json();
@@ -47,25 +47,25 @@ export async function getAllCategories() {
 }
 // Get specific category
 export async function getSpecificCategory(id: string) {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/categories/${id}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories/${id}`);
     const { data } = await res.json();
     return data;
 }
 // Get subcategories for a specific category
 export async function getSubCategoriesForCategory(id: string) {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/categories/${id}/subcategories`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories/${id}/subcategories`);
     const { data } = await res.json();
     return data;
 }
 // Get Subcategories data
 export async function getSubcategories(id?: string) {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/subcategories/${id ? id : ""}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/subcategories/${id ? id : ""}`);
     const { data } = await res.json();
     return data;
 }
 // Get all brands
 export async function getAllBrands() {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/brands`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/brands`, {
         cache: "force-cache"
     });
     const { data } = await res.json();
@@ -73,7 +73,7 @@ export async function getAllBrands() {
 }
 // Get specific brand
 export async function getSpecificBrand(id: string) {
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/brands/${id}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/brands/${id}`);
     const { data } = await res.json();
     return data;
 }
