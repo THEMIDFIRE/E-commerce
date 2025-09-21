@@ -15,7 +15,7 @@ const handler = NextAuth({
                 password: { label: "password", type: "password", placeholder: "password" }
             },
             authorize: async (credentials) => {
-                const res = await fetch(`${process.env.API_BASE_URL}/api/v1/auth/signin`, {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/signin`, {
                     method: "POST",
                     body: JSON.stringify(credentials),
                     headers: {
