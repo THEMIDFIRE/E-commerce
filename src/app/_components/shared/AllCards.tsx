@@ -122,7 +122,7 @@ export function ProdCard({ product }: { product: IProduct }) {
                         </span>
                     )}
                 </div>
-                <div className="absolute bottom-2.5 right-2.5 flex gap-2.5">
+                <div className="absolute bottom-2.5 right-2.5 flex gap-2.5 dark:bg-black">
                     <ShoppingCart size={20} className="hover:fill-accent-foreground hover:cursor-pointer" onClick={handleAddToCart} />
                     <HeartIcon
                         size={20}

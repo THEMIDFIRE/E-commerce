@@ -5,9 +5,6 @@ export async function getUserData() {
         cache: "no-store",
         headers: { token: await getUserToken() as string }
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data;
 }
@@ -25,24 +22,18 @@ export async function getAllProducts(params?: Record<string, string | string[]>)
             }
         });
         
-        queryString = `?${searchParams.toString()}`;
+        queryString = `&${searchParams.toString()}`;
     }
     
-    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products${queryString}`, {
+    const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products?limit=12${queryString}`, {
         cache: "force-cache"
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
-    const { data } = await res.json();
-    return data;
+    const products = await res.json();
+    return products;
 }
 // Get specific product details
 export async function getSpecificProduct(id: string) {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/products/${id}`);
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const { data } = await res.json();
     return data;
 }
@@ -51,36 +42,24 @@ export async function getAllCategories() {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/categories`, {
         cache: "force-cache"
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const { data } = await res.json();
     return data;
 }
 // Get specific category
 export async function getSpecificCategory(id: string) {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/categories/${id}`);
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const { data } = await res.json();
     return data;
 }
 // Get subcategories for a specific category
 export async function getSubCategoriesForCategory(id: string) {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/categories/${id}/subcategories`);
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const { data } = await res.json();
     return data;
 }
 // Get Subcategories data
 export async function getSubcategories(id?: string) {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/subcategories/${id ? id : ""}`);
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const { data } = await res.json();
     return data;
 }
@@ -89,18 +68,12 @@ export async function getAllBrands() {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/brands`, {
         cache: "force-cache"
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const { data } = await res.json();
     return data;
 }
 // Get specific brand
 export async function getSpecificBrand(id: string) {
     const res = await fetch(`${process.env.API_BASE_URL}/api/v1/brands/${id}`);
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const { data } = await res.json();
     return data;
 }
@@ -111,9 +84,6 @@ export async function getUserCart() {
         cache: "no-store",
         headers: { token: token as string }
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data;
 }
@@ -126,9 +96,6 @@ export async function addToCart(productId: string) {
         headers: { token: token as string, "Content-Type": "application/json" },
         body: JSON.stringify({ productId })
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data;
 }
@@ -144,9 +111,6 @@ export async function updateCartQuantity(productId: string, count: number) {
         },
         body: JSON.stringify({ count: count.toString() })
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data;
 }
@@ -158,9 +122,6 @@ export async function rmvCartItem(id?: string) {
         cache: "no-store",
         headers: { token: token as string }
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data;
 }
@@ -171,9 +132,6 @@ export async function getUserWishlist() {
         cache: "no-store",
         headers: { token: token as string }
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data;
 }
@@ -186,9 +144,6 @@ export async function addToWishlist(productId: string) {
         headers: { token: token as string, "Content-Type": "application/json" },
         body: JSON.stringify({ productId })
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data;
 }
@@ -200,9 +155,6 @@ export async function rmvFromWishlist(productId: string) {
         cache: "no-store",
         headers: { token: token as string }
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data;
 }
@@ -215,9 +167,6 @@ export async function checkoutCOD(cartId: string, formData: any) {
         headers: { token: token as string, "Content-Type": "application/json" },
         body: JSON.stringify(formData)
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const result = await res.json();
     return result;
 }
@@ -228,9 +177,6 @@ export async function getUserOrders(userId: string) {
         cache: "no-store",
         headers: { token: token as string }
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data;
 }
@@ -242,15 +188,11 @@ export async function createCardCheckoutSession(cartId: string, returnUrl: strin
         cache: "no-store",
         headers: { token: token as string }
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data;
 }
 // Forget Password
 export async function forgetPassword(userEmail: any) {
-    // try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/forgotPasswords`, {
         method: 'POST',
         cache: 'no-store',
@@ -259,22 +201,11 @@ export async function forgetPassword(userEmail: any) {
         },
         body: JSON.stringify(userEmail)
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data
-
-    // } catch (error) {
-    //     return {
-    //         success: false,
-    //         error: "Network error occurred"
-    //     };
-    // }
 }
 // Reset Code 
 export async function resetCode(ResetCodeForm: any) {
-    try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/verifyResetCode`, {
         method: 'POST',
         cache: 'no-store',
@@ -283,19 +214,10 @@ export async function resetCode(ResetCodeForm: any) {
         },
         body: JSON.stringify(ResetCodeForm)
     });
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data
-    } catch (error) {
-        console.error('Reset code API error:', error);
-        return {
-            success: false,
-            error: "Network error occurred"
-        };
-    }
 }
+// Add new password
 export async function newPassword(NewPasswordForm: any) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/resetPassword`, {
         method: 'PUT',
@@ -303,13 +225,10 @@ export async function newPassword(NewPasswordForm: any) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(NewPasswordForm)
     })
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data
 }
-
+// Update profile
 export async function updateProfile(profileInfo: any) {
     const token = await getUserToken()
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/updateMe`, {
@@ -318,12 +237,10 @@ export async function updateProfile(profileInfo: any) {
         headers: { 'Content-Type': 'application/json', token: token as string },
         body: JSON.stringify(profileInfo)
     })
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
     const data = await res.json();
     return data
 }
+// Change password
 export async function changePassword(passwordForm: any) {
     const token = await getUserToken()
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/changeMyPassword`, {
@@ -332,9 +249,39 @@ export async function changePassword(passwordForm: any) {
         headers: { 'Content-Type': 'application/json', token: token as string },
         body: JSON.stringify(passwordForm)
     })
-    if (!res.ok) {
-        throw new Error(`Error: ${res.statusText}`);
-    }
+    const data = await res.json();
+    return data
+}
+// Add User Addresses
+export async function AddUserAddress(addressInfo: any) {
+    const token = await getUserToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/addresses`, {
+        method: 'POST',
+        cache: 'no-store',
+        headers: { 'Content-Type': 'application/json', token: token as string },
+        body: JSON.stringify(addressInfo)
+    })
+    const data = await res.json();
+    return data
+}
+// Get User Addresses
+export async function getUserAddresses() {
+    const token = await getUserToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/addresses`, {
+        cache: "no-store",
+        headers: { token: token as string }
+    });
+    const data = await res.json();
+    return data
+}
+// Remove User Address
+export async function removeUserAddress(id: string) {
+    const token = await getUserToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/addresses/${id}`, {
+        method: 'DELETE',
+        cache: 'no-store',
+        headers: { token: token as string }
+    })
     const data = await res.json();
     return data
 }

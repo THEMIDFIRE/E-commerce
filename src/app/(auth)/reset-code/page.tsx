@@ -31,7 +31,6 @@ export default function ResetCode() {
     })
 
     const onSubmit = async (formData: ResetCodeForm) => {
-
         try {
             setIsLoading(true)
             const res = await resetCode({
@@ -40,6 +39,9 @@ export default function ResetCode() {
 
             if (res?.status === "Success") {
                 toast.success(res?.message || "Reset code verified successfully!")
+                
+                document.cookie = `reset-flow-step=password; path=/; max-age=1800; SameSite=Lax` // 30 minutes
+                
                 router.push('/reset-password')
             } else {
                 toast.error(res?.message || "Invalid reset code")
@@ -113,7 +115,10 @@ export default function ResetCode() {
                             <button
                                 type="button"
                                 className="text-sm text-blue-600 hover:text-blue-800 underline"
-                                onClick={() => router.push('/forget-password')}
+                                onClick={() => {
+                                    document.cookie = `reset-flow-step=; path=/; max-age=0`
+                                    router.push('/forget-password')
+                                }}
                             >
                                 Didn't receive code? Send again
                             </button>

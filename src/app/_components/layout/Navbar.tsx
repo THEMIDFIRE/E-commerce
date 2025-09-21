@@ -28,7 +28,7 @@ export default function Navbar({ categories, brands }: { categories: ICategory[]
                             <NavigationMenuList>
                                 <NavigationMenuItem>
                                     <NavigationMenuLink href="/" className="text-xl font-bold text-primary">
-                                        Route E-Commerce
+                                        My Shop
                                     </NavigationMenuLink>
                                 </NavigationMenuItem>
                             </NavigationMenuList>

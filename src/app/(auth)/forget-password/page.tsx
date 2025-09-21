@@ -34,19 +34,16 @@ export default function ForgetPassword() {
             setIsLoading(true)
             const res = await forgetPassword(formData)
 
-            // Fixed: Corrected the success/error logic
-            if (res.success || res.message) {
-                toast.success(res.message || "Reset code sent successfully!")
-                router.push('/resetCode')
+            if (res.statusMsg === "success") {
+                toast.success(res.message)
+                document.cookie = `reset-flow-step=code; path=/; max-age=1800; SameSite=Lax` // 30 minutes
+                router.push('/reset-code')
             } else {
-                const errorMessage = res.error ||
-                    res.message ||
-                    "Failed to send reset code"
-                toast.error(errorMessage)
+                toast.error(res.message)
             }
         } catch (error: any) {
             console.error('Forget password error:', error)
-            toast.error("Network error. Please check your connection and try again.")
+            toast.error(error.message)
         } finally {
             setIsLoading(false)
         }

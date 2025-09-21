@@ -6,7 +6,7 @@ import Hero from "./_components/Hero/Hero";
 import Popular from "./_components/Popular/Popular";
 
 export default async function Home() {
-  const products = await getAllProducts()
+  const {data: products} = await getAllProducts()
   const categories = await getAllCategories()
 
   const popularProducts = products

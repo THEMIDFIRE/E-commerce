@@ -13,7 +13,7 @@ export default async function Orders() {
     return (
         <section>
             <div className="container max-w-4/5 mx-auto my-12">
-                <h3 className="text-2xl font-bold">Your Orders</h3>
+                <h3 className="text-2xl font-bold mb-4">Your Orders</h3>
                 <div className="border rounded-lg overflow-hidden">
                     <Table>
                         <TableHeader className="bg-gray-300/80 hover:bg-gray-300">

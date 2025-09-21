@@ -41,6 +41,7 @@ export default function ResetPassword() {
 
             if (res?.token) {
                 toast.success(res?.message || "Password successfully changed")
+                document.cookie = `reset-flow-step=; path=/; max-age=0`
                 router.push('/login')
             } else {
                 toast.error(res?.message || "Invalid credentials")

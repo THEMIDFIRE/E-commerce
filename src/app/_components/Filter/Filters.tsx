@@ -57,7 +57,7 @@ export function SideFilters({
         const params = new URLSearchParams(searchParams.toString());
 
         // Remove existing filter params
-        ['category[in]', 'brand', 'price[gte]', 'price[lte]', 'sort'].forEach(param => {
+        ['category[in]', 'brand', 'price[gte]', 'price[lte]', 'sort', 'page'].forEach(param => {
             params.delete(param);
         });
 
@@ -246,7 +246,7 @@ export function MobileFilters({
         const params = new URLSearchParams(searchParams.toString());
 
         // Remove existing filter params
-        ['category[in]', 'brand', 'price[gte]', 'price[lte]', 'sort'].forEach(param => {
+        ['category[in]', 'brand', 'price[gte]', 'price[lte]', 'sort', 'page'].forEach(param => {
             params.delete(param);
         });
 

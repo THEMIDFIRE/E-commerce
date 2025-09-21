@@ -1,7 +1,15 @@
 "use client"
-import { getUserCart, getUserWishlist } from "@/lib/api";
+import { getUserCart, getUserWishlist, getUserAddresses } from "@/lib/api";
 import { useSession } from "next-auth/react";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+
+interface Address {
+    _id: string;
+    name: string;
+    details: string;
+    phone: string;
+    city: string;
+}
 
 interface IUserContext {
     getCartData: () => Promise<void>;
@@ -10,6 +18,8 @@ interface IUserContext {
     getWishlistData: () => Promise<void>;
     wishlist: any;
     wishlistCount: number
+    getAddressesData: () => Promise<void>;
+    addresses: Address[];
 }
 
 export const userContext = createContext<IUserContext | undefined>(undefined)
@@ -19,6 +29,7 @@ export default function userContextProvider({ children }: { children: ReactNode 
     const [cartCount, setCartCount] = useState(0)
     const [wishlist, setWishlist] = useState(null)
     const [wishlistCount, setWishlistCount] = useState(0)
+    const [addresses, setAddresses] = useState<Address[]>([])
     const { data } = useSession();
     const getCartData = async () => {
         try {
@@ -38,14 +49,23 @@ export default function userContextProvider({ children }: { children: ReactNode 
             console.log('error', error);
         }
     }
+    const getAddressesData = async () => {
+        try {
+            const addressesData = await getUserAddresses();
+            setAddresses(addressesData?.data || []);
+        } catch (error) {
+            console.log('error', error);
+        }
+    }
     useEffect(() => {
         if (data?.user) {
             getCartData();
-            getWishlistData()
+            getWishlistData();
+            getAddressesData();
         }
     }, [data?.user])
 
-    const value = { getCartData, cart, cartCount, getWishlistData, wishlist, wishlistCount };
+    const value = { getCartData, cart, cartCount, getWishlistData, wishlist, wishlistCount, getAddressesData, addresses };
 
     return (
         <userContext.Provider value={value}>{children}</userContext.Provider>
@@ -61,8 +81,16 @@ export const useCart = () => {
 export const useWishlist = () => {
     const wishlistContext = useContext(userContext);
     if (wishlistContext === undefined) {
-        throw new Error("Can't use Cart, login first.");
+        throw new Error("Can't use Wishlist, login first.");
     }
     return wishlistContext;
+}
+
+export const useAddresses = () => {
+    const addressContext = useContext(userContext);
+    if (addressContext === undefined) {
+        throw new Error("Can't use Addresses, login first.");
+    }
+    return addressContext;
 }
 

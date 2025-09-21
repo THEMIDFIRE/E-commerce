@@ -34,12 +34,12 @@ export default function ChangePass() {
             success: 'Password updated successfully',
             error: 'Password can\'t be the same as the old password'
         })
+        form.reset()
     }
 
 
     return (
         <div className="space-y-8">
-            <h4 className="font-bold text-xl">Change Password</h4>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-[400px]">
                     <FormField

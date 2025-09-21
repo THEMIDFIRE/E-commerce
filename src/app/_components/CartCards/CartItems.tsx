@@ -62,7 +62,6 @@ export default function CartItems(item: ProductElement) {
                 </TableCell>
                 <TableCell>{(item.price * item.count)} EGP</TableCell>
             </TableRow>
-
         </>
     )
 }

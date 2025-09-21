@@ -34,12 +34,12 @@ export default function ProfileInfo() {
             success: 'Profile updated successfully',
             error: 'Email already exists'
         })
+        form.reset()
     }
 
 
     return (
-        <div className="mt-10 space-y-8">
-            <h4 className="font-bold text-xl">Profile Information</h4>
+        <div className="space-y-8">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-4/5">
                     <FormField
