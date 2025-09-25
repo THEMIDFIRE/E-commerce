@@ -75,6 +75,8 @@ export function ProdCard({ product }: { product: IProduct }) {
                 error: 'Failed to add'
             })
             getCartData();
+        } else {
+            toast.error('Please login to add to cart')
         }
     }
     const handleWishlistToggle = async () => {
@@ -94,6 +96,8 @@ export function ProdCard({ product }: { product: IProduct }) {
                 })
             }
             getWishlistData();
+        } else {
+            toast.error('Please login to add to wishlist')
         }
     }
 
