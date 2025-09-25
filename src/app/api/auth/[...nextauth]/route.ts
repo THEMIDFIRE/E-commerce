@@ -67,6 +67,7 @@ export const authOptions: NextAuthOptions = {
                 role: string;
             }
             session.token = token.token || ''
+            session.id = token.id || ''
             return session
         }
     }
