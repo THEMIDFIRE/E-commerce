@@ -4,12 +4,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 import { useCart, useWishlist } from "@/context/UserContext";
 import { addToCart, addToWishlist, rmvFromWishlist } from "@/lib/api";
-import { getUserToken } from "@/lib/server-utils";
 import { IBrand, ICategory, IOrder, IProduct } from "@/types/All.type";
 import { HeartIcon, ShoppingCart, Slash, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 import GoBack from "./GoBack";
 
 export function BrandCard({ brand }: { brand: IBrand }) {
@@ -63,12 +63,12 @@ export function SubCatCard({ subcategory, categoryId }: { subcategory: IBrand, c
 export function ProdCard({ product }: { product: IProduct }) {
     const { getCartData } = useCart();
     const { getWishlistData, wishlist } = useWishlist()
+    const { data: session } = useSession();
 
     const isInWishlist = wishlist?.data?.some((item: any) => item._id === product._id)
 
     const handleAddToCart = async () => {
-        const token = await getUserToken()
-        if (token) {
+        if (session?.token) {
             toast.promise(addToCart(product._id), {
                 loading: 'Adding to cart...',
                 success: 'Added to cart',
@@ -80,8 +80,7 @@ export function ProdCard({ product }: { product: IProduct }) {
         }
     }
     const handleWishlistToggle = async () => {
-        const token = await getUserToken()
-        if (token) {
+        if (session?.token) {
             if (isInWishlist) {
                 toast.promise(rmvFromWishlist(product._id), {
                     loading: 'Removing from Wishlist...',
@@ -178,6 +177,7 @@ export function ProdCard({ product }: { product: IProduct }) {
     )
 }
 
+// ... rest of your components remain the same
 export function LoadingCard() {
     return (
         <>
@@ -272,8 +272,8 @@ export function OrderCard({ order }: { order: IOrder }) {
         </TableRow>
     )
 }
-export function OrderCardSkeleton() {
 
+export function OrderCardSkeleton() {
     return (
         <TableRow className="hover:bg-gray-100">
             <TableCell>

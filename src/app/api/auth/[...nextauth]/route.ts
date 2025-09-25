@@ -1,9 +1,8 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { decode } from "next-auth/jwt";
 
-
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
     pages: {
         signIn: "/login",
     },
@@ -67,10 +66,12 @@ const handler = NextAuth({
                 email: string;
                 role: string;
             }
-            session.token = token.token
+            session.token = token.token || ''
             return session
         }
     }
-})
+}
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

@@ -1,15 +1,21 @@
 "use server"
-import { decode } from "next-auth/jwt"
-import { cookies } from "next/headers"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 export const getUserToken = async (returnDecoded = false) => {
-    const userToken = (await cookies()).get('*next-auth.session-token')?.value
-    if (!userToken) return null
-    
-    const decoded = await decode({
-        token: userToken,
-        secret: process.env.AUTH_SECRET!
-    })
-    
-    return returnDecoded ? decoded : (decoded?.token as string)
+    try {
+        const session = await getServerSession(authOptions)
+        
+        if (!session) return null
+        
+        if (returnDecoded) {
+            return session
+        }
+        
+        // Return the API token stored in the session
+        return session.token as string
+    } catch (error) {
+        console.error('Error getting session:', error)
+        return null
+    }
 }
