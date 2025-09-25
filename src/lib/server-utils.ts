@@ -3,7 +3,7 @@ import { decode } from "next-auth/jwt"
 import { cookies } from "next/headers"
 
 export const getUserToken = async (returnDecoded = false) => {
-    const userToken = (await cookies()).get('next-auth.session-token')?.value
+    const userToken = (await cookies()).get('*next-auth.session-token')?.value
     if (!userToken) return null
     
     const decoded = await decode({
